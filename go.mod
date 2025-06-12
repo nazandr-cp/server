@@ -2,7 +2,11 @@ module go-server
 
 go 1.21
 
-require github.com/ethereum/go-ethereum v1.13.5
+require (
+	github.com/ethereum/go-ethereum v1.13.5
+	github.com/go-chi/chi/v5 v5.2.1
+	github.com/gorilla/websocket v1.4.2
+)
 
 require (
 	github.com/Microsoft/go-winio v0.6.1 // indirect
@@ -19,7 +23,6 @@ require (
 	github.com/go-ole/go-ole v1.2.5 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/google/uuid v1.3.0 // indirect
-	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/holiman/uint256 v1.2.3 // indirect
 	github.com/mmcloughlin/addchain v0.4.0 // indirect
 	github.com/shirou/gopsutil v3.21.4-0.20210419000835-c7a38de76ee5+incompatible // indirect

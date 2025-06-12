@@ -1,83 +1,47 @@
-# EpochScheduler Go Server
+# Go Rewards Server
 
-This Go server implements the EpochScheduler service for monitoring and managing epoch transitions in the lend.fam ecosystem.
+This repository implements a lightweight orchestration layer for the
+`EpochManager` and `CollectionsVault` contracts. The server exposes a small
+REST API, consumes data from a The Graph subgraph and pushes blockchain events
+to connected WebSocket clients.
 
-## Features
-
-- Monitors blockchain for epoch boundaries
-- Interacts with EpochManager smart contract
-- Automatically starts new epochs when current epochs end
-- Handles first epoch initialization
-- Configurable polling intervals
-- Graceful shutdown handling
-
-## Configuration
-
-The scheduler is configured using environment variables:
-
-- `RPC_URL`: Ethereum node RPC URL (default: `http://localhost:8545`)
-- `EPOCH_MANAGER_ADDRESS`: Address of the deployed EpochManager contract (required)
-- `PRIVATE_KEY`: Private key of the account that owns the EpochManager contract (required)
-- `POLLING_INTERVAL`: Polling interval in seconds (default: `30`)
-
-## Usage
-
-### Running the scheduler
-
-```bash
-# Set environment variables
-export RPC_URL="https://eth-mainnet.alchemyapi.io/v2/your-api-key"
-export EPOCH_MANAGER_ADDRESS="0x1234567890123456789012345678901234567890"
-export PRIVATE_KEY="your-private-key-without-0x-prefix"
-export POLLING_INTERVAL="30"
-
-# Run the scheduler
-go run main.go
+```
+┌────────────┐   GraphQL HTTP        ┌──────────────┐
+│  Subgraph  │ <──────────────────── │ Go-Server    │
+└────────────┘                        │ • chi router │
+       ▲  ETH JSON-RPC WebSocket      │ • scheduler  │
+       │                              │ • cache      │
+       ▼                              └─────▲────────┘
+┌────────────┐  signed TX / logs            │
+│  Ethereum  │ ─────────────────────────────┘
+└────────────┘
 ```
 
-### Building the binary
+## Getting started
 
-```bash
-go build -o epochscheduler main.go
-./epochscheduler
+```
+RPC_HTTP_URL=<http-url>
+RPC_WS_URL=<ws-url>
+PRIVATE_KEY=<hex>
+SUBGRAPH_URL=<the-graph-url>
+EPOCH_MANAGER_ADDR=<0x..>
+VAULT_ADDR=<0x..>
+CHAIN_ID=1
+HTTP_PORT=8080
 ```
 
-## Architecture
+Run the server:
 
-### Components
+```
+go run ./cmd/server
+```
 
-1. **EpochManager Interface** (`contracts/epochmanager/epochmanager.go`)
-   - Defines the interface for interacting with the EpochManager smart contract
-   - Contains placeholder implementation (to be replaced with abigen-generated bindings)
+Available endpoints:
 
-2. **Scheduler** (`epochscheduler/scheduler.go`)
-   - Main scheduler logic
-   - Monitors epoch transitions
-   - Handles transaction submission for starting new epochs
+- `GET /healthz` – simple ping
+- `GET /epochs/current` – last epoch info from the subgraph
+- `GET /ws` – WebSocket stream of contract logs
 
-3. **Main** (`main.go`)
-   - Application entry point
-   - Configuration management
-   - Graceful shutdown handling
-
-### Key Methods
-
-- `NewScheduler()`: Creates and initializes a new scheduler instance
-- `Run()`: Main scheduler loop with configurable polling
-- `checkAndProcessEpochTransition()`: Checks if epoch transition is needed
-- `startFirstEpoch()`: Handles the first epoch initialization
-- `attemptToStartNewEpoch()`: Starts a new epoch after the previous one ends
-
-## Dependencies
-
-- `github.com/ethereum/go-ethereum`: Ethereum client library
-- Standard Go libraries for time, crypto, and system operations
-
-## TODO
-
-- Replace placeholder EpochManager interface with actual abigen-generated bindings
-- Implement automated processing pipeline triggers
-- Add comprehensive error handling and retry logic
-- Add metrics and monitoring
-- Add configuration file support
-- Add tests
+This codebase is intentionally minimal and only relies on
+[go-chi/chi](https://github.com/go-chi/chi) and
+[go-ethereum](https://github.com/ethereum/go-ethereum).
