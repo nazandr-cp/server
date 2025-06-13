@@ -2,10 +2,10 @@ package eth
 
 import (
 	"context"
-	"crypto/ecdsa"
-	"github.com/ethereum/go-ethereum"
 	"log"
 	"math/big"
+
+	"github.com/ethereum/go-ethereum"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -13,8 +13,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 
-	"go-server/contracts/collectionsvault"
-	"go-server/contracts/epochmanager"
+	"go-server/contracts"
 	"go-server/internal/config"
 )
 
@@ -22,8 +21,8 @@ import (
 type Clients struct {
 	RPC    *ethclient.Client
 	WS     *ethclient.Client
-	EM     epochmanager.EpochManagerABI
-	VA     collectionsvault.CollectionsVaultABI
+	EM     *bind.BoundContract // Changed to *bind.BoundContract
+	VA     *bind.BoundContract // Changed to *bind.BoundContract
 	TxOpts *bind.TransactOpts
 
 	events chan types.Log
@@ -65,10 +64,12 @@ func New(ctx context.Context, cfg config.Config) (*Clients, error) {
 	}
 
 	emAddr := common.HexToAddress(cfg.EpochManagerAddr)
-	em, _ := epochmanager.NewEpochManagerContract(emAddr, rpc)
+	iEpochManager := contracts.NewIEpochManager()
+	em := iEpochManager.Instance(rpc, emAddr) // Updated instantiation
 
 	vaAddr := common.HexToAddress(cfg.VaultAddr)
-	va, _ := collectionsvault.NewCollectionsVaultContract(vaAddr, rpc)
+	iCollectionsVault := contracts.NewICollectionsVault()
+	va := iCollectionsVault.Instance(rpc, vaAddr) // Updated instantiation
 
 	c := &Clients{
 		RPC:    rpc,

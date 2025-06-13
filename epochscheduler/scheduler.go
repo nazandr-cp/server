@@ -14,61 +14,60 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 
-	"go-server/contracts/epochmanager"
+	"go-server/contracts" // Assuming your generated bindings are in this package
+)
+
+const (
+	// EpochStatusActive defines the active status for an epoch. Adjust if necessary.
+	EpochStatusActive = 0
 )
 
 type Scheduler struct {
 	ethClient              *ethclient.Client
 	epochManagerAddr       common.Address
-	epochManager           epochmanager.EpochManagerABI
+	epochManager           *bind.BoundContract // Correct type for abigen V2
 	privateKey             *ecdsa.PrivateKey
 	ownerAddress           common.Address
 	rpcUrl                 string
 	epochManagerAddressStr string
 	privateKeyStr          string
 	pollingInterval        time.Duration
-	epochDuration          time.Duration
+	epochDuration          time.Duration // This will be fetched from contract
 	chainID                *big.Int
 }
 
 // NewScheduler creates a new scheduler instance
 func NewScheduler(rpcUrl, epochManagerAddress, privateKeyStr string, pollingInterval time.Duration) (*Scheduler, error) {
-	// Initialize Ethereum client
 	client, err := ethclient.Dial(rpcUrl)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to Ethereum client: %v", err)
 	}
 
-	// Parse private key
-	privateKey, err := crypto.HexToECDSA(strings.TrimPrefix(privateKeyStr, "0x"))
+	pkey, err := crypto.HexToECDSA(strings.TrimPrefix(privateKeyStr, "0x"))
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse private key: %v", err)
 	}
 
-	// Get owner address from private key
-	ownerAddress := crypto.PubkeyToAddress(privateKey.PublicKey)
-
-	// Parse contract address
+	ownerAddr := crypto.PubkeyToAddress(pkey.PublicKey)
 	contractAddr := common.HexToAddress(epochManagerAddress)
 
-	// Create contract instance
-	epochManagerContract, err := epochmanager.NewEpochManagerContract(contractAddr, client)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create EpochManager contract instance: %v", err)
+	iEpochManager := contracts.NewIEpochManager() // Use generated constructor
+	epochManagerBinding := iEpochManager.Instance(client, contractAddr)
+	if epochManagerBinding == nil {
+		return nil, fmt.Errorf("failed to create EpochManager contract binding instance")
 	}
 
-	// Get chain ID
-	chainID, err := client.ChainID(context.Background())
+	chainID, err := client.NetworkID(context.Background())
 	if err != nil {
 		return nil, fmt.Errorf("failed to get chain ID: %v", err)
 	}
 
-	scheduler := &Scheduler{
+	s := &Scheduler{
 		ethClient:              client,
 		epochManagerAddr:       contractAddr,
-		epochManager:           epochManagerContract,
-		privateKey:             privateKey,
-		ownerAddress:           ownerAddress,
+		epochManager:           epochManagerBinding,
+		privateKey:             pkey,
+		ownerAddress:           ownerAddr,
 		rpcUrl:                 rpcUrl,
 		epochManagerAddressStr: epochManagerAddress,
 		privateKeyStr:          privateKeyStr,
@@ -76,159 +75,162 @@ func NewScheduler(rpcUrl, epochManagerAddress, privateKeyStr string, pollingInte
 		chainID:                chainID,
 	}
 
-	// Fetch epoch duration from contract
-	epochDuration, err := scheduler.epochManager.EpochDuration(&bind.CallOpts{})
+	// Fetch epoch duration from the contract upon initialization
+	epochDur, err := s.GetEpochDurationFromContract()
 	if err != nil {
-		return nil, fmt.Errorf("failed to get epoch duration: %v", err)
+		log.Printf("Warning: failed to get epoch duration from contract: %v. Using default or zero.", err)
+		// Handle error or set a default duration if necessary
+		s.epochDuration = 0 // Or some default
+	} else {
+		s.epochDuration = epochDur
+		log.Printf("Epoch duration set from contract: %v", s.epochDuration)
 	}
-	scheduler.epochDuration = time.Duration(epochDuration.Int64()) * time.Second
 
-	log.Printf("Scheduler initialized - Owner: %s, Contract: %s, Epoch Duration: %v",
-		ownerAddress.Hex(), contractAddr.Hex(), scheduler.epochDuration)
-
-	return scheduler, nil
+	return s, nil
 }
 
-// Run starts the main scheduler loop
-func (s *Scheduler) Run(ctx context.Context) error {
-	log.Printf("Starting EpochScheduler with polling interval: %v", s.pollingInterval)
+// GetEpochDurationFromContract fetches the epoch duration from the smart contract.
+func (s *Scheduler) GetEpochDurationFromContract() (time.Duration, error) {
+	var out []interface{}
+	// Assuming "epochDuration" is a view function in your IEpochManager interface
+	err := s.epochManager.Call(&bind.CallOpts{Context: context.Background()}, &out, "epochDuration")
+	if err != nil {
+		return 0, fmt.Errorf("failed to call epochDuration on contract: %w", err)
+	}
+	if len(out) == 0 {
+		return 0, fmt.Errorf("epochDuration call returned no data")
+	}
+	epochDurationBig, ok := out[0].(*big.Int)
+	if !ok {
+		return 0, fmt.Errorf("failed to cast epoch duration to *big.Int, got %T", out[0])
+	}
+	return time.Duration(epochDurationBig.Int64()) * time.Second, nil
+}
 
+func (s *Scheduler) Start() {
+	log.Println("Starting epoch scheduler...")
 	ticker := time.NewTicker(s.pollingInterval)
 	defer ticker.Stop()
 
-	// Initial check
-	if err := s.checkAndProcessEpochTransition(); err != nil {
-		log.Printf("Initial epoch check failed: %v", err)
-	}
-
 	for {
 		select {
-		case <-ctx.Done():
-			log.Println("Scheduler stopping...")
-			return ctx.Err()
 		case <-ticker.C:
-			if err := s.checkAndProcessEpochTransition(); err != nil {
-				log.Printf("Epoch transition check failed: %v", err)
-			}
+			s.checkAndStartNewEpoch()
 		}
 	}
 }
 
-// checkAndProcessEpochTransition checks if epoch transition is needed and processes it
-func (s *Scheduler) checkAndProcessEpochTransition() error {
-	// Get current epoch ID
-	currentEpochId, err := s.epochManager.GetCurrentEpochId(&bind.CallOpts{})
-	if err != nil {
-		return fmt.Errorf("failed to get current epoch ID: %v", err)
-	}
+func (s *Scheduler) checkAndStartNewEpoch() {
+	log.Println("Checking for new epoch...")
 
+	var outGetCurrentEpochId []interface{}
+	err := s.epochManager.Call(&bind.CallOpts{Context: context.Background()}, &outGetCurrentEpochId, "getCurrentEpochId")
+	if err != nil {
+		log.Printf("Error getting current epoch ID: %v", err)
+		return
+	}
+	var currentEpochId *big.Int
+	if len(outGetCurrentEpochId) > 0 {
+		currentEpochId, _ = outGetCurrentEpochId[0].(*big.Int)
+	}
+	if currentEpochId == nil {
+		log.Printf("Error: currentEpochId is nil after calling getCurrentEpochId")
+		return
+	}
 	log.Printf("Current epoch ID: %s", currentEpochId.String())
 
-	// If no epochs started yet (currentEpochId == 0)
-	if currentEpochId.Cmp(big.NewInt(0)) == 0 {
-		log.Println("No epochs started yet, attempting to start first epoch")
-		return s.startFirstEpoch()
-	}
-
-	// Get current epoch details
-	currentEpoch, err := s.epochManager.GetEpoch(&bind.CallOpts{}, currentEpochId)
+	var outGetEpoch []interface{}
+	err = s.epochManager.Call(&bind.CallOpts{Context: context.Background()}, &outGetEpoch, "getEpoch", currentEpochId)
 	if err != nil {
-		return fmt.Errorf("failed to get current epoch details: %v", err)
+		log.Printf("Error getting current epoch data for epoch %s: %v", currentEpochId.String(), err)
+		return
 	}
 
-	currentTime := time.Now().Unix()
-	epochEndTime := currentEpoch.EndTime.Int64()
+	var epochEndTime *big.Int
+	var epochStatus *big.Int
 
-	log.Printf("Current time: %d, Epoch end time: %d, Status: %d",
-		currentTime, epochEndTime, currentEpoch.Status)
+	if len(outGetEpoch) > 0 {
+		// Assuming getEpoch returns a struct/tuple where elements are directly in outGetEpoch[0]
+		// or outGetEpoch itself is the list of elements if the function returns multiple values.
+		// The exact parsing depends on the Solidity function signature and abigen's behavior.
+		// If getEpoch returns (uint256 id, uint256 startTime, uint256 endTime, uint256 status, ...)
+		// and abigen unpacks this into a []interface{} where each element is a field.
 
-	// Check if current epoch has ended and is still active
-	if currentTime > epochEndTime && currentEpoch.Status == epochmanager.EpochStatusActive {
-		log.Printf("Current epoch %s has ended, starting new epoch", currentEpochId.String())
-
-		// Log that automated processing pipelines would be triggered here
-		log.Printf("Would trigger automated processing pipelines for epoch %s", currentEpochId.String())
-
-		return s.attemptToStartNewEpoch(currentEpoch.EndTime)
-	}
-
-	log.Printf("Epoch %s is still active (ends at %d)", currentEpochId.String(), epochEndTime)
-	return nil
-}
-
-// startFirstEpoch starts the first epoch
-func (s *Scheduler) startFirstEpoch() error {
-	startTime := big.NewInt(time.Now().Unix())
-
-	log.Printf("Starting first epoch with start time: %s", startTime.String())
-
-	return s.executeStartNewEpoch(startTime)
-}
-
-// attemptToStartNewEpoch starts a new epoch after the previous one has ended
-func (s *Scheduler) attemptToStartNewEpoch(previousEpochEndTime *big.Int) error {
-	currentTime := time.Now().Unix()
-
-	// Calculate next start time - use the later of previous epoch end time or current time
-	var nextStartTime *big.Int
-	if currentTime > previousEpochEndTime.Int64() {
-		nextStartTime = big.NewInt(currentTime)
+		// Try to assert outGetEpoch[0] to []interface{} first, as structs are often wrapped.
+		epochDataSlice, isSlice := outGetEpoch[0].([]interface{})
+		if isSlice {
+			if len(epochDataSlice) >= 4 { // id, startTime, endTime, status
+				if et, ok := epochDataSlice[2].(*big.Int); ok { // endTime is 3rd field (index 2)
+					epochEndTime = et
+				}
+				if st, ok := epochDataSlice[3].(*big.Int); ok { // status is 4th field (index 3)
+					epochStatus = st
+				}
+			} else {
+				log.Printf("Error: getEpoch returned slice with not enough elements: got %d, expected at least 4", len(epochDataSlice))
+				return
+			}
+		} else if len(outGetEpoch) >= 4 { // Fallback: if outGetEpoch itself is the flat list of members
+			if et, ok := outGetEpoch[2].(*big.Int); ok { // endTime is 3rd field (index 2)
+				epochEndTime = et
+			}
+			if st, ok := outGetEpoch[3].(*big.Int); ok { // status is 4th field (index 3)
+				epochStatus = st
+			}
+		} else {
+			log.Printf("Error: getEpoch returned unexpected data structure or not enough elements. Len(outGetEpoch): %d", len(outGetEpoch))
+			return
+		}
 	} else {
-		nextStartTime = previousEpochEndTime
+		log.Printf("Error: getEpoch call returned no data.")
+		return
 	}
 
-	log.Printf("Starting new epoch with start time: %s (previous epoch ended at: %s)",
-		nextStartTime.String(), previousEpochEndTime.String())
+	if epochEndTime == nil || epochStatus == nil {
+		log.Printf("Error parsing epoch data from contract call (endTime or status is nil)")
+		return
+	}
 
-	return s.executeStartNewEpoch(nextStartTime)
+	currentTime := big.NewInt(time.Now().Unix())
+	log.Printf("Current time: %s, Epoch end time: %s, Epoch status: %s", currentTime.String(), epochEndTime.String(), epochStatus.String())
+
+	if currentTime.Cmp(epochEndTime) > 0 && epochStatus.Cmp(big.NewInt(EpochStatusActive)) == 0 {
+		log.Println("Epoch has ended, starting new epoch...")
+		s.startNewEpoch()
+	} else {
+		log.Println("Epoch has not ended or is not active.")
+	}
 }
 
-// executeStartNewEpoch executes the StartNewEpoch transaction
-func (s *Scheduler) executeStartNewEpoch(startTime *big.Int) error {
-	// Get current nonce
+func (s *Scheduler) startNewEpoch() {
+	log.Println("Attempting to start a new epoch...")
 	nonce, err := s.ethClient.PendingNonceAt(context.Background(), s.ownerAddress)
 	if err != nil {
-		return fmt.Errorf("failed to get nonce: %v", err)
+		log.Printf("Failed to get nonce: %v", err)
+		return
 	}
 
-	// Get gas price
-	gasPrice, err := s.ethClient.SuggestGasPrice(context.Background())
+	suggestedGasPrice, err := s.ethClient.SuggestGasPrice(context.Background()) // Renamed variable
 	if err != nil {
-		return fmt.Errorf("failed to get gas price: %v", err)
+		log.Printf("Failed to suggest gas price: %v", err)
+		return
 	}
 
-	// Create transaction options
 	auth, err := bind.NewKeyedTransactorWithChainID(s.privateKey, s.chainID)
 	if err != nil {
-		return fmt.Errorf("failed to create transactor: %v", err)
+		log.Printf("Failed to create transactor: %v", err)
+		return
 	}
-
 	auth.Nonce = big.NewInt(int64(nonce))
 	auth.Value = big.NewInt(0)
-	auth.GasLimit = uint64(300000) // Set a reasonable gas limit
-	auth.GasPrice = gasPrice
+	auth.GasLimit = uint64(300000)    // Consider making this configurable or estimating it
+	auth.GasPrice = suggestedGasPrice // Use the renamed variable
 
-	// Execute transaction
-	tx, err := s.epochManager.StartNewEpoch(auth, startTime)
+	currentUnixTime := big.NewInt(time.Now().Unix()) // Use a new variable name
+	tx, err := s.epochManager.Transact(auth, "startNewEpoch", currentUnixTime)
 	if err != nil {
-		return fmt.Errorf("failed to start new epoch: %v", err)
+		log.Printf("Failed to send StartNewEpoch transaction: %v", err)
+		return
 	}
-
-	log.Printf("StartNewEpoch transaction submitted: %s", tx.Hash().Hex())
-
-	// Wait for transaction confirmation (optional - could be done async)
-	receipt, err := bind.WaitMined(context.Background(), s.ethClient, tx)
-	if err != nil {
-		log.Printf("Transaction may have failed, receipt error: %v", err)
-		return err
-	}
-
-	if receipt.Status == 1 {
-		log.Printf("New epoch started successfully! Transaction: %s", tx.Hash().Hex())
-	} else {
-		log.Printf("Transaction failed! Transaction: %s", tx.Hash().Hex())
-		return fmt.Errorf("transaction failed with status: %d", receipt.Status)
-	}
-
-	return nil
+	log.Printf("StartNewEpoch transaction sent: %s", tx.Hash().Hex())
 }

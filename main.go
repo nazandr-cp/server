@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"math/big"
 	"os"
@@ -55,8 +54,8 @@ func main() {
 	}
 
 	// Setup graceful shutdown
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	// ctx, cancel := context.WithCancel(context.Background())
+	// defer cancel()
 
 	// Setup signal handling for graceful shutdown
 	sigChan := make(chan os.Signal, 1)
@@ -64,16 +63,13 @@ func main() {
 
 	// Start scheduler in a goroutine
 	go func() {
-		if err := scheduler.Run(ctx); err != nil && err != context.Canceled {
-			log.Printf("Scheduler error: %v", err)
-			cancel()
-		}
+		scheduler.Start()
 	}()
 
 	// Wait for shutdown signal
 	<-sigChan
 	log.Println("Shutdown signal received, stopping scheduler...")
-	cancel()
+	// cancel()
 
 	// Give the scheduler some time to cleanup
 	time.Sleep(2 * time.Second)
