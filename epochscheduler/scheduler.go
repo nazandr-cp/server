@@ -14,18 +14,18 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 
-	"go-server/contracts" // Assuming your generated bindings are in this package
+	"go-server/contracts"
+	"go-server/services/subsidy"
 )
 
 const (
-	// EpochStatusActive defines the active status for an epoch. Adjust if necessary.
 	EpochStatusActive = 0
 )
 
 type Scheduler struct {
 	ethClient              *ethclient.Client
 	epochManagerAddr       common.Address
-	epochManager           *bind.BoundContract // Correct type for abigen V2
+	epochManager           *bind.BoundContract
 	privateKey             *ecdsa.PrivateKey
 	ownerAddress           common.Address
 	rpcUrl                 string
@@ -34,10 +34,11 @@ type Scheduler struct {
 	pollingInterval        time.Duration
 	epochDuration          time.Duration // This will be fetched from contract
 	chainID                *big.Int
+	subsidyService         *subsidy.Service
 }
 
 // NewScheduler creates a new scheduler instance
-func NewScheduler(rpcUrl, epochManagerAddress, privateKeyStr string, pollingInterval time.Duration) (*Scheduler, error) {
+func NewScheduler(rpcUrl, epochManagerAddress, privateKeyStr string, pollingInterval time.Duration, subsidyService *subsidy.Service) (*Scheduler, error) {
 	client, err := ethclient.Dial(rpcUrl)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to Ethereum client: %v", err)
@@ -51,7 +52,7 @@ func NewScheduler(rpcUrl, epochManagerAddress, privateKeyStr string, pollingInte
 	ownerAddr := crypto.PubkeyToAddress(pkey.PublicKey)
 	contractAddr := common.HexToAddress(epochManagerAddress)
 
-	iEpochManager := contracts.NewIEpochManager() // Use generated constructor
+	iEpochManager := contracts.NewIEpochManager()
 	epochManagerBinding := iEpochManager.Instance(client, contractAddr)
 	if epochManagerBinding == nil {
 		return nil, fmt.Errorf("failed to create EpochManager contract binding instance")
@@ -73,14 +74,14 @@ func NewScheduler(rpcUrl, epochManagerAddress, privateKeyStr string, pollingInte
 		privateKeyStr:          privateKeyStr,
 		pollingInterval:        pollingInterval,
 		chainID:                chainID,
+		subsidyService:         subsidyService,
 	}
 
 	// Fetch epoch duration from the contract upon initialization
 	epochDur, err := s.GetEpochDurationFromContract()
 	if err != nil {
 		log.Printf("Warning: failed to get epoch duration from contract: %v. Using default or zero.", err)
-		// Handle error or set a default duration if necessary
-		s.epochDuration = 0 // Or some default
+		s.epochDuration = 0
 	} else {
 		s.epochDuration = epochDur
 		log.Printf("Epoch duration set from contract: %v", s.epochDuration)
@@ -92,7 +93,6 @@ func NewScheduler(rpcUrl, epochManagerAddress, privateKeyStr string, pollingInte
 // GetEpochDurationFromContract fetches the epoch duration from the smart contract.
 func (s *Scheduler) GetEpochDurationFromContract() (time.Duration, error) {
 	var out []interface{}
-	// Assuming "epochDuration" is a view function in your IEpochManager interface
 	err := s.epochManager.Call(&bind.CallOpts{Context: context.Background()}, &out, "epochDuration")
 	if err != nil {
 		return 0, fmt.Errorf("failed to call epochDuration on contract: %w", err)
@@ -195,8 +195,30 @@ func (s *Scheduler) checkAndStartNewEpoch() {
 	log.Printf("Current time: %s, Epoch end time: %s, Epoch status: %s", currentTime.String(), epochEndTime.String(), epochStatus.String())
 
 	if currentTime.Cmp(epochEndTime) > 0 && epochStatus.Cmp(big.NewInt(EpochStatusActive)) == 0 {
-		log.Println("Epoch has ended, starting new epoch...")
-		s.startNewEpoch()
+		log.Printf("Epoch %s has ended, attempting to start new epoch...", currentEpochId.String())
+		s.startNewEpoch() // This attempts to start the *next* epoch
+
+		// After attempting to start a new epoch, trigger subsidy for the epoch that just finalized.
+		if s.subsidyService != nil {
+			log.Printf("Triggering subsidy payments for finalized epoch ID: %s", currentEpochId.String())
+			// Use a background context for the subsidy run, or a more specific one if available/needed.
+			// The subsidy operation should not block the scheduler's main loop indefinitely.
+			// Errors from subsidyService.Run should be logged but not halt the epoch scheduler.
+			go func(epochIDToSubsidize *big.Int) {
+				if epochIDToSubsidize == nil {
+					log.Printf("Error: epochIDToSubsidize is nil, cannot run subsidy.")
+					return
+				}
+				err := s.subsidyService.Run(context.Background(), epochIDToSubsidize.Uint64())
+				if err != nil {
+					log.Printf("Error running subsidy service for epoch %s: %v", epochIDToSubsidize.String(), err)
+				} else {
+					log.Printf("Subsidy service successfully processed epoch %s", epochIDToSubsidize.String())
+				}
+			}(currentEpochId) // Pass currentEpochId to the goroutine to avoid race conditions if currentEpochId is modified later.
+		} else {
+			log.Println("Subsidy service is not configured, skipping subsidy payment.")
+		}
 	} else {
 		log.Println("Epoch has not ended or is not active.")
 	}
@@ -223,10 +245,10 @@ func (s *Scheduler) startNewEpoch() {
 	}
 	auth.Nonce = big.NewInt(int64(nonce))
 	auth.Value = big.NewInt(0)
-	auth.GasLimit = uint64(300000)    // Consider making this configurable or estimating it
-	auth.GasPrice = suggestedGasPrice // Use the renamed variable
+	auth.GasLimit = uint64(300000)
+	auth.GasPrice = suggestedGasPrice
 
-	currentUnixTime := big.NewInt(time.Now().Unix()) // Use a new variable name
+	currentUnixTime := big.NewInt(time.Now().Unix())
 	tx, err := s.epochManager.Transact(auth, "startNewEpoch", currentUnixTime)
 	if err != nil {
 		log.Printf("Failed to send StartNewEpoch transaction: %v", err)
