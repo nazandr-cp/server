@@ -45,3 +45,22 @@ Available endpoints:
 This codebase is intentionally minimal and only relies on
 [go-chi/chi](https://github.com/go-chi/chi) and
 [go-ethereum](https://github.com/ethereum/go-ethereum).
+
+## Docker
+
+You can build a container image and run the server with Docker Compose:
+
+```sh
+docker compose up --build
+```
+
+The compose file exposes port `8080` and relies on the following environment variables, which you can adjust in `docker-compose.yml`:
+
+- `RPC_HTTP_URL`
+- `RPC_WS_URL`
+- `PRIVATE_KEY`
+- `SUBGRAPH_URL`
+- `EPOCH_MANAGER_ADDR`
+- `VAULT_ADDR`
+- `CHAIN_ID`
+- `HTTP_PORT`
