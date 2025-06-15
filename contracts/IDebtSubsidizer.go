@@ -24,14 +24,19 @@ var (
 	_ = abi.ConvertType
 )
 
-// IDebtSubsidizerSubsidy is an auto generated low-level Go binding around an user-defined struct.
-type IDebtSubsidizerSubsidy struct {
-	Account    common.Address
-	Collection common.Address
-	Vault      common.Address
-	Amount     *big.Int
-	Nonce      *big.Int
-	Deadline   *big.Int
+// ICollectionRegistryWeightFunction is an auto generated low-level Go binding around an user-defined struct.
+type ICollectionRegistryWeightFunction struct {
+	FnType uint8
+	P1     *big.Int
+	P2     *big.Int
+}
+
+// IDebtSubsidizerClaimData is an auto generated low-level Go binding around an user-defined struct.
+type IDebtSubsidizerClaimData struct {
+	Recipient   common.Address
+	Collection  common.Address
+	Amount      *big.Int
+	MerkleProof [][32]byte
 }
 
 // IDebtSubsidizerVaultInfo is an auto generated low-level Go binding around an user-defined struct.
@@ -40,16 +45,9 @@ type IDebtSubsidizerVaultInfo struct {
 	CToken         common.Address
 }
 
-// IDebtSubsidizerWeightFunction is an auto generated low-level Go binding around an user-defined struct.
-type IDebtSubsidizerWeightFunction struct {
-	FnType uint8
-	P1     *big.Int
-	P2     *big.Int
-}
-
 // IDebtSubsidizerMetaData contains all meta data concerning the IDebtSubsidizer contract.
 var IDebtSubsidizerMetaData = bind.MetaData{
-	ABI: "[{\"type\":\"function\",\"name\":\"addVault\",\"inputs\":[{\"name\":\"vaultAddress_\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"lendingManagerAddress_\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"collectionRewardBasis\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint8\",\"internalType\":\"enumIDebtSubsidizer.RewardBasis\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"isCollectionWhitelisted\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"pause\",\"inputs\":[],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"paused\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"removeCollection\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"removeVault\",\"inputs\":[{\"name\":\"vaultAddress_\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"setWeightFunction\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"weightFunction\",\"type\":\"tuple\",\"internalType\":\"structIDebtSubsidizer.WeightFunction\",\"components\":[{\"name\":\"fnType\",\"type\":\"uint8\",\"internalType\":\"enumIDebtSubsidizer.WeightFunctionType\"},{\"name\":\"p1\",\"type\":\"int256\",\"internalType\":\"int256\"},{\"name\":\"p2\",\"type\":\"int256\",\"internalType\":\"int256\"}]}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"subsidize\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"subsidizes\",\"type\":\"tuple[]\",\"internalType\":\"structIDebtSubsidizer.Subsidy[]\",\"components\":[{\"name\":\"account\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collection\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"vault\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"nonce\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"deadline\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"name\":\"signature\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"subsidySigner\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"unpause\",\"inputs\":[],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"updateCollectionPercentageShare\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"newSharePercentageBps\",\"type\":\"uint16\",\"internalType\":\"uint16\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"updateTrustedSigner\",\"inputs\":[{\"name\":\"newSigner\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"userNonce\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"userAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"nonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"vault\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"tuple\",\"internalType\":\"structIDebtSubsidizer.VaultInfo\",\"components\":[{\"name\":\"lendingManager\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"cToken\",\"type\":\"address\",\"internalType\":\"address\"}]}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"whitelistCollection\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionType\",\"type\":\"uint8\",\"internalType\":\"enumIDebtSubsidizer.CollectionType\"},{\"name\":\"rewardBasis\",\"type\":\"uint8\",\"internalType\":\"enumIDebtSubsidizer.RewardBasis\"},{\"name\":\"sharePercentageBps\",\"type\":\"uint16\",\"internalType\":\"uint16\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"CollectionYieldShareUpdated\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"oldSharePercentage\",\"type\":\"uint16\",\"indexed\":false,\"internalType\":\"uint16\"},{\"name\":\"newSharePercentage\",\"type\":\"uint16\",\"indexed\":false,\"internalType\":\"uint16\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"DebtSubsidized\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"user\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"NewCollectionWhitelisted\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"collectionType\",\"type\":\"uint8\",\"indexed\":false,\"internalType\":\"enumIDebtSubsidizer.CollectionType\"},{\"name\":\"rewardBasis\",\"type\":\"uint8\",\"indexed\":false,\"internalType\":\"enumIDebtSubsidizer.RewardBasis\"},{\"name\":\"sharePercentage\",\"type\":\"uint16\",\"indexed\":false,\"internalType\":\"uint16\"},{\"name\":\"weightFunction\",\"type\":\"tuple\",\"indexed\":false,\"internalType\":\"structIDebtSubsidizer.WeightFunction\",\"components\":[{\"name\":\"fnType\",\"type\":\"uint8\",\"internalType\":\"enumIDebtSubsidizer.WeightFunctionType\"},{\"name\":\"p1\",\"type\":\"int256\",\"internalType\":\"int256\"},{\"name\":\"p2\",\"type\":\"int256\",\"internalType\":\"int256\"}]}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"TrustedSignerUpdated\",\"inputs\":[{\"name\":\"oldSigner\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"newSigner\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"changedBy\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"VaultAdded\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"cTokenAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"lendingManagerAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"VaultRemoved\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"WeightFunctionConfigUpdated\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"oldWeightFunction\",\"type\":\"tuple\",\"indexed\":false,\"internalType\":\"structIDebtSubsidizer.WeightFunction\",\"components\":[{\"name\":\"fnType\",\"type\":\"uint8\",\"internalType\":\"enumIDebtSubsidizer.WeightFunctionType\"},{\"name\":\"p1\",\"type\":\"int256\",\"internalType\":\"int256\"},{\"name\":\"p2\",\"type\":\"int256\",\"internalType\":\"int256\"}]},{\"name\":\"newWeightFunction\",\"type\":\"tuple\",\"indexed\":false,\"internalType\":\"structIDebtSubsidizer.WeightFunction\",\"components\":[{\"name\":\"fnType\",\"type\":\"uint8\",\"internalType\":\"enumIDebtSubsidizer.WeightFunctionType\"},{\"name\":\"p1\",\"type\":\"int256\",\"internalType\":\"int256\"},{\"name\":\"p2\",\"type\":\"int256\",\"internalType\":\"int256\"}]}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"WeightFunctionSet\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"fn\",\"type\":\"tuple\",\"indexed\":false,\"internalType\":\"structIDebtSubsidizer.WeightFunction\",\"components\":[{\"name\":\"fnType\",\"type\":\"uint8\",\"internalType\":\"enumIDebtSubsidizer.WeightFunctionType\"},{\"name\":\"p1\",\"type\":\"int256\",\"internalType\":\"int256\"},{\"name\":\"p2\",\"type\":\"int256\",\"internalType\":\"int256\"}]}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"WhitelistCollectionRemoved\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"error\",\"name\":\"AddressZero\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"ArrayLengthMismatch\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"CannotSetSignerToZeroAddress\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"ClaimExpired\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"CollectionAlreadyExists\",\"inputs\":[{\"name\":\"collection\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"CollectionAlreadyWhitelistedInVault\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"CollectionNotWhitelisted\",\"inputs\":[{\"name\":\"collection\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"CollectionNotWhitelistedInVault\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"InsufficientYield\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"InvalidCollectionInterface\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"interfaceId\",\"type\":\"bytes4\",\"internalType\":\"bytes4\"}]},{\"type\":\"error\",\"name\":\"InvalidNonce\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"InvalidSecondsColl\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"InvalidSignature\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"InvalidYieldSharePercentage\",\"inputs\":[{\"name\":\"totalSharePercentage\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"type\":\"error\",\"name\":\"InvalidYieldSlice\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"LendingManagerAssetMismatch\",\"inputs\":[{\"name\":\"vaultAsset\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"lmAsset\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"LendingManagerNotSetForVault\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"VaultAlreadyRegistered\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"VaultMismatch\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"VaultNotRegistered\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"}]}]",
+	ABI: "[{\"type\":\"function\",\"name\":\"addVault\",\"inputs\":[{\"name\":\"vaultAddress_\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"lendingManagerAddress_\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"claimSubsidy\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"claim\",\"type\":\"tuple\",\"internalType\":\"structIDebtSubsidizer.ClaimData\",\"components\":[{\"name\":\"recipient\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collection\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"merkleProof\",\"type\":\"bytes32[]\",\"internalType\":\"bytes32[]\"}]}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"isCollectionWhitelisted\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"pause\",\"inputs\":[],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"paused\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"removeCollection\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"removeVault\",\"inputs\":[{\"name\":\"vaultAddress_\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"unpause\",\"inputs\":[],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"updateMerkleRoot\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"merkleRoot\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"vault\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"tuple\",\"internalType\":\"structIDebtSubsidizer.VaultInfo\",\"components\":[{\"name\":\"lendingManager\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"cToken\",\"type\":\"address\",\"internalType\":\"address\"}]}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"whitelistCollection\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"CollectionYieldShareUpdated\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"oldSharePercentageBps\",\"type\":\"uint16\",\"indexed\":false,\"internalType\":\"uint16\"},{\"name\":\"newSharePercentageBps\",\"type\":\"uint16\",\"indexed\":false,\"internalType\":\"uint16\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"MerkleRootUpdated\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"merkleRoot\",\"type\":\"bytes32\",\"indexed\":false,\"internalType\":\"bytes32\"},{\"name\":\"updatedBy\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"NewCollectionWhitelisted\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"SubsidyClaimed\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"recipient\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"collection\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"TrustedSignerUpdated\",\"inputs\":[{\"name\":\"oldSigner\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"newSigner\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"changedBy\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"VaultAdded\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"cTokenAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"lendingManagerAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"VaultRemoved\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"WeightFunctionConfigUpdated\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"oldWeightFunction\",\"type\":\"tuple\",\"indexed\":false,\"internalType\":\"structICollectionRegistry.WeightFunction\",\"components\":[{\"name\":\"fnType\",\"type\":\"uint8\",\"internalType\":\"enumICollectionRegistry.WeightFunctionType\"},{\"name\":\"p1\",\"type\":\"int256\",\"internalType\":\"int256\"},{\"name\":\"p2\",\"type\":\"int256\",\"internalType\":\"int256\"}]},{\"name\":\"newWeightFunction\",\"type\":\"tuple\",\"indexed\":false,\"internalType\":\"structICollectionRegistry.WeightFunction\",\"components\":[{\"name\":\"fnType\",\"type\":\"uint8\",\"internalType\":\"enumICollectionRegistry.WeightFunctionType\"},{\"name\":\"p1\",\"type\":\"int256\",\"internalType\":\"int256\"},{\"name\":\"p2\",\"type\":\"int256\",\"internalType\":\"int256\"}]}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"WhitelistCollectionRemoved\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"error\",\"name\":\"AddressZero\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"AlreadyClaimed\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"ArrayLengthMismatch\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"CannotSetSignerToZeroAddress\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"CollectionAlreadyExists\",\"inputs\":[{\"name\":\"collection\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"CollectionAlreadyWhitelistedInVault\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"CollectionNotWhitelisted\",\"inputs\":[{\"name\":\"collection\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"CollectionNotWhitelistedInVault\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"InsufficientYield\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"InvalidCollectionInterface\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"interfaceId\",\"type\":\"bytes4\",\"internalType\":\"bytes4\"}]},{\"type\":\"error\",\"name\":\"InvalidMerkleProof\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"InvalidSecondsColl\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"InvalidSignature\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"InvalidYieldSharePercentage\",\"inputs\":[{\"name\":\"totalSharePercentage\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"type\":\"error\",\"name\":\"InvalidYieldSlice\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"LeafAlreadyClaimed\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"LendingManagerAssetMismatch\",\"inputs\":[{\"name\":\"vaultAsset\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"lmAsset\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"LendingManagerNotSetForVault\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"MerkleRootNotSet\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"VaultAlreadyRegistered\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"VaultMismatch\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"VaultNotRegistered\",\"inputs\":[{\"name\":\"vaultAddress\",\"type\":\"address\",\"internalType\":\"address\"}]}]",
 	ID:  "IDebtSubsidizer",
 }
 
@@ -85,29 +83,16 @@ func (iDebtSubsidizer *IDebtSubsidizer) PackAddVault(vaultAddress common.Address
 	return enc
 }
 
-// PackCollectionRewardBasis is the Go binding used to pack the parameters required for calling
-// the contract method with ID 0xe6aeb97b.
+// PackClaimSubsidy is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0xa5a8d0fc.
 //
-// Solidity: function collectionRewardBasis(address vaultAddress, address collectionAddress) view returns(uint8)
-func (iDebtSubsidizer *IDebtSubsidizer) PackCollectionRewardBasis(vaultAddress common.Address, collectionAddress common.Address) []byte {
-	enc, err := iDebtSubsidizer.abi.Pack("collectionRewardBasis", vaultAddress, collectionAddress)
+// Solidity: function claimSubsidy(address vaultAddress, (address,address,uint256,bytes32[]) claim) returns()
+func (iDebtSubsidizer *IDebtSubsidizer) PackClaimSubsidy(vaultAddress common.Address, claim IDebtSubsidizerClaimData) []byte {
+	enc, err := iDebtSubsidizer.abi.Pack("claimSubsidy", vaultAddress, claim)
 	if err != nil {
 		panic(err)
 	}
 	return enc
-}
-
-// UnpackCollectionRewardBasis is the Go binding that unpacks the parameters returned
-// from invoking the contract method with ID 0xe6aeb97b.
-//
-// Solidity: function collectionRewardBasis(address vaultAddress, address collectionAddress) view returns(uint8)
-func (iDebtSubsidizer *IDebtSubsidizer) UnpackCollectionRewardBasis(data []byte) (uint8, error) {
-	out, err := iDebtSubsidizer.abi.Unpack("collectionRewardBasis", data)
-	if err != nil {
-		return *new(uint8), err
-	}
-	out0 := *abi.ConvertType(out[0], new(uint8)).(*uint8)
-	return out0, err
 }
 
 // PackIsCollectionWhitelisted is the Go binding used to pack the parameters required for calling
@@ -196,55 +181,6 @@ func (iDebtSubsidizer *IDebtSubsidizer) PackRemoveVault(vaultAddress common.Addr
 	return enc
 }
 
-// PackSetWeightFunction is the Go binding used to pack the parameters required for calling
-// the contract method with ID 0x075d01f0.
-//
-// Solidity: function setWeightFunction(address vaultAddress, address collectionAddress, (uint8,int256,int256) weightFunction) returns()
-func (iDebtSubsidizer *IDebtSubsidizer) PackSetWeightFunction(vaultAddress common.Address, collectionAddress common.Address, weightFunction IDebtSubsidizerWeightFunction) []byte {
-	enc, err := iDebtSubsidizer.abi.Pack("setWeightFunction", vaultAddress, collectionAddress, weightFunction)
-	if err != nil {
-		panic(err)
-	}
-	return enc
-}
-
-// PackSubsidize is the Go binding used to pack the parameters required for calling
-// the contract method with ID 0x64559408.
-//
-// Solidity: function subsidize(address vaultAddress, (address,address,address,uint256,uint256,uint256)[] subsidizes, bytes signature) returns()
-func (iDebtSubsidizer *IDebtSubsidizer) PackSubsidize(vaultAddress common.Address, subsidizes []IDebtSubsidizerSubsidy, signature []byte) []byte {
-	enc, err := iDebtSubsidizer.abi.Pack("subsidize", vaultAddress, subsidizes, signature)
-	if err != nil {
-		panic(err)
-	}
-	return enc
-}
-
-// PackSubsidySigner is the Go binding used to pack the parameters required for calling
-// the contract method with ID 0x804096e0.
-//
-// Solidity: function subsidySigner() view returns(address)
-func (iDebtSubsidizer *IDebtSubsidizer) PackSubsidySigner() []byte {
-	enc, err := iDebtSubsidizer.abi.Pack("subsidySigner")
-	if err != nil {
-		panic(err)
-	}
-	return enc
-}
-
-// UnpackSubsidySigner is the Go binding that unpacks the parameters returned
-// from invoking the contract method with ID 0x804096e0.
-//
-// Solidity: function subsidySigner() view returns(address)
-func (iDebtSubsidizer *IDebtSubsidizer) UnpackSubsidySigner(data []byte) (common.Address, error) {
-	out, err := iDebtSubsidizer.abi.Unpack("subsidySigner", data)
-	if err != nil {
-		return *new(common.Address), err
-	}
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-	return out0, err
-}
-
 // PackUnpause is the Go binding used to pack the parameters required for calling
 // the contract method with ID 0x3f4ba83a.
 //
@@ -257,53 +193,16 @@ func (iDebtSubsidizer *IDebtSubsidizer) PackUnpause() []byte {
 	return enc
 }
 
-// PackUpdateCollectionPercentageShare is the Go binding used to pack the parameters required for calling
-// the contract method with ID 0x930e203a.
+// PackUpdateMerkleRoot is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0xe786818e.
 //
-// Solidity: function updateCollectionPercentageShare(address vaultAddress, address collectionAddress, uint16 newSharePercentageBps) returns()
-func (iDebtSubsidizer *IDebtSubsidizer) PackUpdateCollectionPercentageShare(vaultAddress common.Address, collectionAddress common.Address, newSharePercentageBps uint16) []byte {
-	enc, err := iDebtSubsidizer.abi.Pack("updateCollectionPercentageShare", vaultAddress, collectionAddress, newSharePercentageBps)
+// Solidity: function updateMerkleRoot(address vaultAddress, bytes32 merkleRoot) returns()
+func (iDebtSubsidizer *IDebtSubsidizer) PackUpdateMerkleRoot(vaultAddress common.Address, merkleRoot [32]byte) []byte {
+	enc, err := iDebtSubsidizer.abi.Pack("updateMerkleRoot", vaultAddress, merkleRoot)
 	if err != nil {
 		panic(err)
 	}
 	return enc
-}
-
-// PackUpdateTrustedSigner is the Go binding used to pack the parameters required for calling
-// the contract method with ID 0x7530625f.
-//
-// Solidity: function updateTrustedSigner(address newSigner) returns()
-func (iDebtSubsidizer *IDebtSubsidizer) PackUpdateTrustedSigner(newSigner common.Address) []byte {
-	enc, err := iDebtSubsidizer.abi.Pack("updateTrustedSigner", newSigner)
-	if err != nil {
-		panic(err)
-	}
-	return enc
-}
-
-// PackUserNonce is the Go binding used to pack the parameters required for calling
-// the contract method with ID 0x2f6cdb0d.
-//
-// Solidity: function userNonce(address vaultAddress, address userAddress) view returns(uint64 nonce)
-func (iDebtSubsidizer *IDebtSubsidizer) PackUserNonce(vaultAddress common.Address, userAddress common.Address) []byte {
-	enc, err := iDebtSubsidizer.abi.Pack("userNonce", vaultAddress, userAddress)
-	if err != nil {
-		panic(err)
-	}
-	return enc
-}
-
-// UnpackUserNonce is the Go binding that unpacks the parameters returned
-// from invoking the contract method with ID 0x2f6cdb0d.
-//
-// Solidity: function userNonce(address vaultAddress, address userAddress) view returns(uint64 nonce)
-func (iDebtSubsidizer *IDebtSubsidizer) UnpackUserNonce(data []byte) (uint64, error) {
-	out, err := iDebtSubsidizer.abi.Unpack("userNonce", data)
-	if err != nil {
-		return *new(uint64), err
-	}
-	out0 := *abi.ConvertType(out[0], new(uint64)).(*uint64)
-	return out0, err
 }
 
 // PackVault is the Go binding used to pack the parameters required for calling
@@ -332,11 +231,11 @@ func (iDebtSubsidizer *IDebtSubsidizer) UnpackVault(data []byte) (IDebtSubsidize
 }
 
 // PackWhitelistCollection is the Go binding used to pack the parameters required for calling
-// the contract method with ID 0x120c030f.
+// the contract method with ID 0x2526952a.
 //
-// Solidity: function whitelistCollection(address vaultAddress, address collectionAddress, uint8 collectionType, uint8 rewardBasis, uint16 sharePercentageBps) returns()
-func (iDebtSubsidizer *IDebtSubsidizer) PackWhitelistCollection(vaultAddress common.Address, collectionAddress common.Address, collectionType uint8, rewardBasis uint8, sharePercentageBps uint16) []byte {
-	enc, err := iDebtSubsidizer.abi.Pack("whitelistCollection", vaultAddress, collectionAddress, collectionType, rewardBasis, sharePercentageBps)
+// Solidity: function whitelistCollection(address vaultAddress, address collectionAddress) returns()
+func (iDebtSubsidizer *IDebtSubsidizer) PackWhitelistCollection(vaultAddress common.Address, collectionAddress common.Address) []byte {
+	enc, err := iDebtSubsidizer.abi.Pack("whitelistCollection", vaultAddress, collectionAddress)
 	if err != nil {
 		panic(err)
 	}
@@ -345,11 +244,11 @@ func (iDebtSubsidizer *IDebtSubsidizer) PackWhitelistCollection(vaultAddress com
 
 // IDebtSubsidizerCollectionYieldShareUpdated represents a CollectionYieldShareUpdated event raised by the IDebtSubsidizer contract.
 type IDebtSubsidizerCollectionYieldShareUpdated struct {
-	VaultAddress       common.Address
-	CollectionAddress  common.Address
-	OldSharePercentage uint16
-	NewSharePercentage uint16
-	Raw                *types.Log // Blockchain specific contextual infos
+	VaultAddress          common.Address
+	CollectionAddress     common.Address
+	OldSharePercentageBps uint16
+	NewSharePercentageBps uint16
+	Raw                   *types.Log // Blockchain specific contextual infos
 }
 
 const IDebtSubsidizerCollectionYieldShareUpdatedEventName = "CollectionYieldShareUpdated"
@@ -362,7 +261,7 @@ func (IDebtSubsidizerCollectionYieldShareUpdated) ContractEventName() string {
 // UnpackCollectionYieldShareUpdatedEvent is the Go binding that unpacks the event data emitted
 // by contract.
 //
-// Solidity: event CollectionYieldShareUpdated(address indexed vaultAddress, address indexed collectionAddress, uint16 oldSharePercentage, uint16 newSharePercentage)
+// Solidity: event CollectionYieldShareUpdated(address indexed vaultAddress, address indexed collectionAddress, uint16 oldSharePercentageBps, uint16 newSharePercentageBps)
 func (iDebtSubsidizer *IDebtSubsidizer) UnpackCollectionYieldShareUpdatedEvent(log *types.Log) (*IDebtSubsidizerCollectionYieldShareUpdated, error) {
 	event := "CollectionYieldShareUpdated"
 	if log.Topics[0] != iDebtSubsidizer.abi.Events[event].ID {
@@ -387,32 +286,31 @@ func (iDebtSubsidizer *IDebtSubsidizer) UnpackCollectionYieldShareUpdatedEvent(l
 	return out, nil
 }
 
-// IDebtSubsidizerDebtSubsidized represents a DebtSubsidized event raised by the IDebtSubsidizer contract.
-type IDebtSubsidizerDebtSubsidized struct {
-	VaultAddress      common.Address
-	User              common.Address
-	CollectionAddress common.Address
-	Amount            *big.Int
-	Raw               *types.Log // Blockchain specific contextual infos
+// IDebtSubsidizerMerkleRootUpdated represents a MerkleRootUpdated event raised by the IDebtSubsidizer contract.
+type IDebtSubsidizerMerkleRootUpdated struct {
+	VaultAddress common.Address
+	MerkleRoot   [32]byte
+	UpdatedBy    common.Address
+	Raw          *types.Log // Blockchain specific contextual infos
 }
 
-const IDebtSubsidizerDebtSubsidizedEventName = "DebtSubsidized"
+const IDebtSubsidizerMerkleRootUpdatedEventName = "MerkleRootUpdated"
 
 // ContractEventName returns the user-defined event name.
-func (IDebtSubsidizerDebtSubsidized) ContractEventName() string {
-	return IDebtSubsidizerDebtSubsidizedEventName
+func (IDebtSubsidizerMerkleRootUpdated) ContractEventName() string {
+	return IDebtSubsidizerMerkleRootUpdatedEventName
 }
 
-// UnpackDebtSubsidizedEvent is the Go binding that unpacks the event data emitted
+// UnpackMerkleRootUpdatedEvent is the Go binding that unpacks the event data emitted
 // by contract.
 //
-// Solidity: event DebtSubsidized(address indexed vaultAddress, address indexed user, address indexed collectionAddress, uint256 amount)
-func (iDebtSubsidizer *IDebtSubsidizer) UnpackDebtSubsidizedEvent(log *types.Log) (*IDebtSubsidizerDebtSubsidized, error) {
-	event := "DebtSubsidized"
+// Solidity: event MerkleRootUpdated(address indexed vaultAddress, bytes32 merkleRoot, address indexed updatedBy)
+func (iDebtSubsidizer *IDebtSubsidizer) UnpackMerkleRootUpdatedEvent(log *types.Log) (*IDebtSubsidizerMerkleRootUpdated, error) {
+	event := "MerkleRootUpdated"
 	if log.Topics[0] != iDebtSubsidizer.abi.Events[event].ID {
 		return nil, errors.New("event signature mismatch")
 	}
-	out := new(IDebtSubsidizerDebtSubsidized)
+	out := new(IDebtSubsidizerMerkleRootUpdated)
 	if len(log.Data) > 0 {
 		if err := iDebtSubsidizer.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
 			return nil, err
@@ -435,10 +333,6 @@ func (iDebtSubsidizer *IDebtSubsidizer) UnpackDebtSubsidizedEvent(log *types.Log
 type IDebtSubsidizerNewCollectionWhitelisted struct {
 	VaultAddress      common.Address
 	CollectionAddress common.Address
-	CollectionType    uint8
-	RewardBasis       uint8
-	SharePercentage   uint16
-	WeightFunction    IDebtSubsidizerWeightFunction
 	Raw               *types.Log // Blockchain specific contextual infos
 }
 
@@ -452,13 +346,57 @@ func (IDebtSubsidizerNewCollectionWhitelisted) ContractEventName() string {
 // UnpackNewCollectionWhitelistedEvent is the Go binding that unpacks the event data emitted
 // by contract.
 //
-// Solidity: event NewCollectionWhitelisted(address indexed vaultAddress, address indexed collectionAddress, uint8 collectionType, uint8 rewardBasis, uint16 sharePercentage, (uint8,int256,int256) weightFunction)
+// Solidity: event NewCollectionWhitelisted(address indexed vaultAddress, address indexed collectionAddress)
 func (iDebtSubsidizer *IDebtSubsidizer) UnpackNewCollectionWhitelistedEvent(log *types.Log) (*IDebtSubsidizerNewCollectionWhitelisted, error) {
 	event := "NewCollectionWhitelisted"
 	if log.Topics[0] != iDebtSubsidizer.abi.Events[event].ID {
 		return nil, errors.New("event signature mismatch")
 	}
 	out := new(IDebtSubsidizerNewCollectionWhitelisted)
+	if len(log.Data) > 0 {
+		if err := iDebtSubsidizer.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iDebtSubsidizer.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
+}
+
+// IDebtSubsidizerSubsidyClaimed represents a SubsidyClaimed event raised by the IDebtSubsidizer contract.
+type IDebtSubsidizerSubsidyClaimed struct {
+	VaultAddress common.Address
+	Recipient    common.Address
+	Collection   common.Address
+	Amount       *big.Int
+	Raw          *types.Log // Blockchain specific contextual infos
+}
+
+const IDebtSubsidizerSubsidyClaimedEventName = "SubsidyClaimed"
+
+// ContractEventName returns the user-defined event name.
+func (IDebtSubsidizerSubsidyClaimed) ContractEventName() string {
+	return IDebtSubsidizerSubsidyClaimedEventName
+}
+
+// UnpackSubsidyClaimedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event SubsidyClaimed(address indexed vaultAddress, address indexed recipient, address indexed collection, uint256 amount)
+func (iDebtSubsidizer *IDebtSubsidizer) UnpackSubsidyClaimedEvent(log *types.Log) (*IDebtSubsidizerSubsidyClaimed, error) {
+	event := "SubsidyClaimed"
+	if log.Topics[0] != iDebtSubsidizer.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(IDebtSubsidizerSubsidyClaimed)
 	if len(log.Data) > 0 {
 		if err := iDebtSubsidizer.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
 			return nil, err
@@ -608,8 +546,8 @@ func (iDebtSubsidizer *IDebtSubsidizer) UnpackVaultRemovedEvent(log *types.Log) 
 type IDebtSubsidizerWeightFunctionConfigUpdated struct {
 	VaultAddress      common.Address
 	CollectionAddress common.Address
-	OldWeightFunction IDebtSubsidizerWeightFunction
-	NewWeightFunction IDebtSubsidizerWeightFunction
+	OldWeightFunction ICollectionRegistryWeightFunction
+	NewWeightFunction ICollectionRegistryWeightFunction
 	Raw               *types.Log // Blockchain specific contextual infos
 }
 
@@ -630,49 +568,6 @@ func (iDebtSubsidizer *IDebtSubsidizer) UnpackWeightFunctionConfigUpdatedEvent(l
 		return nil, errors.New("event signature mismatch")
 	}
 	out := new(IDebtSubsidizerWeightFunctionConfigUpdated)
-	if len(log.Data) > 0 {
-		if err := iDebtSubsidizer.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
-			return nil, err
-		}
-	}
-	var indexed abi.Arguments
-	for _, arg := range iDebtSubsidizer.abi.Events[event].Inputs {
-		if arg.Indexed {
-			indexed = append(indexed, arg)
-		}
-	}
-	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
-		return nil, err
-	}
-	out.Raw = log
-	return out, nil
-}
-
-// IDebtSubsidizerWeightFunctionSet represents a WeightFunctionSet event raised by the IDebtSubsidizer contract.
-type IDebtSubsidizerWeightFunctionSet struct {
-	VaultAddress      common.Address
-	CollectionAddress common.Address
-	Fn                IDebtSubsidizerWeightFunction
-	Raw               *types.Log // Blockchain specific contextual infos
-}
-
-const IDebtSubsidizerWeightFunctionSetEventName = "WeightFunctionSet"
-
-// ContractEventName returns the user-defined event name.
-func (IDebtSubsidizerWeightFunctionSet) ContractEventName() string {
-	return IDebtSubsidizerWeightFunctionSetEventName
-}
-
-// UnpackWeightFunctionSetEvent is the Go binding that unpacks the event data emitted
-// by contract.
-//
-// Solidity: event WeightFunctionSet(address indexed vaultAddress, address indexed collectionAddress, (uint8,int256,int256) fn)
-func (iDebtSubsidizer *IDebtSubsidizer) UnpackWeightFunctionSetEvent(log *types.Log) (*IDebtSubsidizerWeightFunctionSet, error) {
-	event := "WeightFunctionSet"
-	if log.Topics[0] != iDebtSubsidizer.abi.Events[event].ID {
-		return nil, errors.New("event signature mismatch")
-	}
-	out := new(IDebtSubsidizerWeightFunctionSet)
 	if len(log.Data) > 0 {
 		if err := iDebtSubsidizer.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
 			return nil, err
@@ -739,14 +634,14 @@ func (iDebtSubsidizer *IDebtSubsidizer) UnpackError(raw []byte) (any, error) {
 	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["AddressZero"].ID.Bytes()[:4]) {
 		return iDebtSubsidizer.UnpackAddressZeroError(raw[4:])
 	}
+	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["AlreadyClaimed"].ID.Bytes()[:4]) {
+		return iDebtSubsidizer.UnpackAlreadyClaimedError(raw[4:])
+	}
 	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["ArrayLengthMismatch"].ID.Bytes()[:4]) {
 		return iDebtSubsidizer.UnpackArrayLengthMismatchError(raw[4:])
 	}
 	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["CannotSetSignerToZeroAddress"].ID.Bytes()[:4]) {
 		return iDebtSubsidizer.UnpackCannotSetSignerToZeroAddressError(raw[4:])
-	}
-	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["ClaimExpired"].ID.Bytes()[:4]) {
-		return iDebtSubsidizer.UnpackClaimExpiredError(raw[4:])
 	}
 	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["CollectionAlreadyExists"].ID.Bytes()[:4]) {
 		return iDebtSubsidizer.UnpackCollectionAlreadyExistsError(raw[4:])
@@ -766,8 +661,8 @@ func (iDebtSubsidizer *IDebtSubsidizer) UnpackError(raw []byte) (any, error) {
 	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["InvalidCollectionInterface"].ID.Bytes()[:4]) {
 		return iDebtSubsidizer.UnpackInvalidCollectionInterfaceError(raw[4:])
 	}
-	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["InvalidNonce"].ID.Bytes()[:4]) {
-		return iDebtSubsidizer.UnpackInvalidNonceError(raw[4:])
+	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["InvalidMerkleProof"].ID.Bytes()[:4]) {
+		return iDebtSubsidizer.UnpackInvalidMerkleProofError(raw[4:])
 	}
 	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["InvalidSecondsColl"].ID.Bytes()[:4]) {
 		return iDebtSubsidizer.UnpackInvalidSecondsCollError(raw[4:])
@@ -781,11 +676,17 @@ func (iDebtSubsidizer *IDebtSubsidizer) UnpackError(raw []byte) (any, error) {
 	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["InvalidYieldSlice"].ID.Bytes()[:4]) {
 		return iDebtSubsidizer.UnpackInvalidYieldSliceError(raw[4:])
 	}
+	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["LeafAlreadyClaimed"].ID.Bytes()[:4]) {
+		return iDebtSubsidizer.UnpackLeafAlreadyClaimedError(raw[4:])
+	}
 	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["LendingManagerAssetMismatch"].ID.Bytes()[:4]) {
 		return iDebtSubsidizer.UnpackLendingManagerAssetMismatchError(raw[4:])
 	}
 	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["LendingManagerNotSetForVault"].ID.Bytes()[:4]) {
 		return iDebtSubsidizer.UnpackLendingManagerNotSetForVaultError(raw[4:])
+	}
+	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["MerkleRootNotSet"].ID.Bytes()[:4]) {
+		return iDebtSubsidizer.UnpackMerkleRootNotSetError(raw[4:])
 	}
 	if bytes.Equal(raw[:4], iDebtSubsidizer.abi.Errors["VaultAlreadyRegistered"].ID.Bytes()[:4]) {
 		return iDebtSubsidizer.UnpackVaultAlreadyRegisteredError(raw[4:])
@@ -817,6 +718,29 @@ func IDebtSubsidizerAddressZeroErrorID() common.Hash {
 func (iDebtSubsidizer *IDebtSubsidizer) UnpackAddressZeroError(raw []byte) (*IDebtSubsidizerAddressZero, error) {
 	out := new(IDebtSubsidizerAddressZero)
 	if err := iDebtSubsidizer.abi.UnpackIntoInterface(out, "AddressZero", raw); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// IDebtSubsidizerAlreadyClaimed represents a AlreadyClaimed error raised by the IDebtSubsidizer contract.
+type IDebtSubsidizerAlreadyClaimed struct {
+}
+
+// ErrorID returns the hash of canonical representation of the error's signature.
+//
+// Solidity: error AlreadyClaimed()
+func IDebtSubsidizerAlreadyClaimedErrorID() common.Hash {
+	return common.HexToHash("0x646cf558a545d59f8a09cbf8a0eb8a9332f1d17834843b20fc8d154839dc46d7")
+}
+
+// UnpackAlreadyClaimedError is the Go binding used to decode the provided
+// error data into the corresponding Go error struct.
+//
+// Solidity: error AlreadyClaimed()
+func (iDebtSubsidizer *IDebtSubsidizer) UnpackAlreadyClaimedError(raw []byte) (*IDebtSubsidizerAlreadyClaimed, error) {
+	out := new(IDebtSubsidizerAlreadyClaimed)
+	if err := iDebtSubsidizer.abi.UnpackIntoInterface(out, "AlreadyClaimed", raw); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -863,29 +787,6 @@ func IDebtSubsidizerCannotSetSignerToZeroAddressErrorID() common.Hash {
 func (iDebtSubsidizer *IDebtSubsidizer) UnpackCannotSetSignerToZeroAddressError(raw []byte) (*IDebtSubsidizerCannotSetSignerToZeroAddress, error) {
 	out := new(IDebtSubsidizerCannotSetSignerToZeroAddress)
 	if err := iDebtSubsidizer.abi.UnpackIntoInterface(out, "CannotSetSignerToZeroAddress", raw); err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// IDebtSubsidizerClaimExpired represents a ClaimExpired error raised by the IDebtSubsidizer contract.
-type IDebtSubsidizerClaimExpired struct {
-}
-
-// ErrorID returns the hash of canonical representation of the error's signature.
-//
-// Solidity: error ClaimExpired()
-func IDebtSubsidizerClaimExpiredErrorID() common.Hash {
-	return common.HexToHash("0x82a49d9e1a771843d39e8826b2cc5ec620f1a84fb3845ddd134da6fe9b0b747c")
-}
-
-// UnpackClaimExpiredError is the Go binding used to decode the provided
-// error data into the corresponding Go error struct.
-//
-// Solidity: error ClaimExpired()
-func (iDebtSubsidizer *IDebtSubsidizer) UnpackClaimExpiredError(raw []byte) (*IDebtSubsidizerClaimExpired, error) {
-	out := new(IDebtSubsidizerClaimExpired)
-	if err := iDebtSubsidizer.abi.UnpackIntoInterface(out, "ClaimExpired", raw); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -1037,24 +938,24 @@ func (iDebtSubsidizer *IDebtSubsidizer) UnpackInvalidCollectionInterfaceError(ra
 	return out, nil
 }
 
-// IDebtSubsidizerInvalidNonce represents a InvalidNonce error raised by the IDebtSubsidizer contract.
-type IDebtSubsidizerInvalidNonce struct {
+// IDebtSubsidizerInvalidMerkleProof represents a InvalidMerkleProof error raised by the IDebtSubsidizer contract.
+type IDebtSubsidizerInvalidMerkleProof struct {
 }
 
 // ErrorID returns the hash of canonical representation of the error's signature.
 //
-// Solidity: error InvalidNonce()
-func IDebtSubsidizerInvalidNonceErrorID() common.Hash {
-	return common.HexToHash("0x756688fec2871909d72599c334b663ffcc94654c438569966c7fd3ab3a351f34")
+// Solidity: error InvalidMerkleProof()
+func IDebtSubsidizerInvalidMerkleProofErrorID() common.Hash {
+	return common.HexToHash("0xb05e92facfa0fd6ba9338977017107202232768a12b21141a91a36a56212ad1e")
 }
 
-// UnpackInvalidNonceError is the Go binding used to decode the provided
+// UnpackInvalidMerkleProofError is the Go binding used to decode the provided
 // error data into the corresponding Go error struct.
 //
-// Solidity: error InvalidNonce()
-func (iDebtSubsidizer *IDebtSubsidizer) UnpackInvalidNonceError(raw []byte) (*IDebtSubsidizerInvalidNonce, error) {
-	out := new(IDebtSubsidizerInvalidNonce)
-	if err := iDebtSubsidizer.abi.UnpackIntoInterface(out, "InvalidNonce", raw); err != nil {
+// Solidity: error InvalidMerkleProof()
+func (iDebtSubsidizer *IDebtSubsidizer) UnpackInvalidMerkleProofError(raw []byte) (*IDebtSubsidizerInvalidMerkleProof, error) {
+	out := new(IDebtSubsidizerInvalidMerkleProof)
+	if err := iDebtSubsidizer.abi.UnpackIntoInterface(out, "InvalidMerkleProof", raw); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -1153,6 +1054,29 @@ func (iDebtSubsidizer *IDebtSubsidizer) UnpackInvalidYieldSliceError(raw []byte)
 	return out, nil
 }
 
+// IDebtSubsidizerLeafAlreadyClaimed represents a LeafAlreadyClaimed error raised by the IDebtSubsidizer contract.
+type IDebtSubsidizerLeafAlreadyClaimed struct {
+}
+
+// ErrorID returns the hash of canonical representation of the error's signature.
+//
+// Solidity: error LeafAlreadyClaimed()
+func IDebtSubsidizerLeafAlreadyClaimedErrorID() common.Hash {
+	return common.HexToHash("0xc3d950a6db6bfa50727933551103d7c3ebaebdeb452e4e90f0d0855460fbc3d6")
+}
+
+// UnpackLeafAlreadyClaimedError is the Go binding used to decode the provided
+// error data into the corresponding Go error struct.
+//
+// Solidity: error LeafAlreadyClaimed()
+func (iDebtSubsidizer *IDebtSubsidizer) UnpackLeafAlreadyClaimedError(raw []byte) (*IDebtSubsidizerLeafAlreadyClaimed, error) {
+	out := new(IDebtSubsidizerLeafAlreadyClaimed)
+	if err := iDebtSubsidizer.abi.UnpackIntoInterface(out, "LeafAlreadyClaimed", raw); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // IDebtSubsidizerLendingManagerAssetMismatch represents a LendingManagerAssetMismatch error raised by the IDebtSubsidizer contract.
 type IDebtSubsidizerLendingManagerAssetMismatch struct {
 	VaultAsset common.Address
@@ -1197,6 +1121,29 @@ func IDebtSubsidizerLendingManagerNotSetForVaultErrorID() common.Hash {
 func (iDebtSubsidizer *IDebtSubsidizer) UnpackLendingManagerNotSetForVaultError(raw []byte) (*IDebtSubsidizerLendingManagerNotSetForVault, error) {
 	out := new(IDebtSubsidizerLendingManagerNotSetForVault)
 	if err := iDebtSubsidizer.abi.UnpackIntoInterface(out, "LendingManagerNotSetForVault", raw); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// IDebtSubsidizerMerkleRootNotSet represents a MerkleRootNotSet error raised by the IDebtSubsidizer contract.
+type IDebtSubsidizerMerkleRootNotSet struct {
+}
+
+// ErrorID returns the hash of canonical representation of the error's signature.
+//
+// Solidity: error MerkleRootNotSet()
+func IDebtSubsidizerMerkleRootNotSetErrorID() common.Hash {
+	return common.HexToHash("0x9f8a28f2b6ecfc78c926d70ccbdbc1af50319e4764903fa1ee9bb94dc558b392")
+}
+
+// UnpackMerkleRootNotSetError is the Go binding used to decode the provided
+// error data into the corresponding Go error struct.
+//
+// Solidity: error MerkleRootNotSet()
+func (iDebtSubsidizer *IDebtSubsidizer) UnpackMerkleRootNotSetError(raw []byte) (*IDebtSubsidizerMerkleRootNotSet, error) {
+	out := new(IDebtSubsidizerMerkleRootNotSet)
+	if err := iDebtSubsidizer.abi.UnpackIntoInterface(out, "MerkleRootNotSet", raw); err != nil {
 		return nil, err
 	}
 	return out, nil
