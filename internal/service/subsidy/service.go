@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"math/big"
 	"strings"
-	"time"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -184,39 +183,35 @@ func (s *Service) processPayments(ctx context.Context, recipients []Recipient) e
 	auth.GasLimit = uint64(0)
 	auth.GasTipCap = gasTipCap
 
-	var subsidies []contracts.IDebtSubsidizerSubsidy
+	var vaultAddresses []common.Address
+	var claims []contracts.IDebtSubsidizerClaimData
+
 	for i := range addresses {
-		subsidies = append(subsidies, contracts.IDebtSubsidizerSubsidy{
-			Account:    addresses[i],
-			Collection: common.HexToAddress("0x0000000000000000000000000000000000000000"),
-			Vault:      common.HexToAddress("0x0000000000000000000000000000000000000000"),
-			Amount:     amounts[i],
-			Nonce:      big.NewInt(0),
-			Deadline:   big.NewInt(time.Now().Add(1 * time.Hour).Unix()),
+		vaultAddresses = append(vaultAddresses, common.HexToAddress("0x0000000000000000000000000000000000000000"))
+		claims = append(claims, contracts.IDebtSubsidizerClaimData{
+			Recipient:   addresses[i],
+			TotalEarned: amounts[i],
+			MerkleProof: [][32]byte{},
 		})
 	}
 
-	signature := []byte{}
-
-	vaultAddress := common.HexToAddress("0x0000000000000000000000000000000000000000")
-
-	tx, err := s.subsidizerContract.Transact(auth, "subsidize", vaultAddress, subsidies, signature)
+	tx, err := s.subsidizerContract.Transact(auth, "claimAllSubsidies", vaultAddresses, claims)
 	if err != nil {
-		return fmt.Errorf("failed to send subsidize transaction: %w", err)
+		return fmt.Errorf("failed to send claimAllSubsidies transaction: %w", err)
 	}
 
-	s.logger.Info("Subsidize transaction sent", zap.String("tx_hash", tx.Hash().Hex()))
+	s.logger.Info("ClaimAllSubsidies transaction sent", zap.String("tx_hash", tx.Hash().Hex()))
 
 	receipt, err := bind.WaitMined(ctx, s.ethClient, tx)
 	if err != nil {
-		return fmt.Errorf("failed to mine subsidize transaction: %w", err)
+		return fmt.Errorf("failed to mine claimAllSubsidies transaction: %w", err)
 	}
 
 	if receipt.Status != types.ReceiptStatusSuccessful {
-		return fmt.Errorf("subsidize transaction failed: %s", receipt.TxHash.Hex())
+		return fmt.Errorf("claimAllSubsidies transaction failed: %s", receipt.TxHash.Hex())
 	}
 
-	s.logger.Info("Subsidize transaction successful", zap.String("tx_hash", receipt.TxHash.Hex()))
+	s.logger.Info("ClaimAllSubsidies transaction successful", zap.String("tx_hash", receipt.TxHash.Hex()))
 	return nil
 }
 

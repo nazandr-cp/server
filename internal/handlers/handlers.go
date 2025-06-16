@@ -14,8 +14,8 @@ import (
 	"go-server/internal/config"
 	"go-server/internal/eth"
 	"go-server/internal/gql"
+	"go-server/internal/service/subsidy"
 	"go-server/internal/ws"
-	"go-server/services/subsidy"
 )
 
 type Deps struct {
