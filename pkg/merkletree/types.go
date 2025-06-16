@@ -12,3 +12,10 @@ type Leaf struct {
 	Account common.Address
 	Amount  *big.Int
 }
+
+// Pair represents an address/amount pair used for simple Merkle trees where
+// the leaf hash is `keccak256(account, amount)`.
+type Pair struct {
+	Account common.Address
+	Amount  *big.Int
+}

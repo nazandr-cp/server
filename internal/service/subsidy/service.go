@@ -17,6 +17,7 @@ import (
 	config "go-server/configs"
 	"go-server/contracts"
 	gql "go-server/internal/platform/graphql"
+	"go-server/pkg/merkletree"
 )
 
 // Recipient represents an account eligible for subsidy
@@ -32,6 +33,7 @@ type Service struct {
 	tokenContract      *bind.BoundContract
 	signer             *ecdsa.PrivateKey
 	ownerAddress       common.Address
+	vaultAddr          common.Address
 	config             config.SubsidyConfig
 	logger             *zap.Logger
 	ethClient          *ethclient.Client
@@ -75,12 +77,15 @@ func NewService(cfg config.Config, logger *zap.Logger) (*Service, error) {
 	// Subgraph Client
 	subgraphURL := cfg.SubgraphURL
 
+	vaultAddr := common.HexToAddress(cfg.VaultAddr)
+
 	return &Service{
 		subgraphURL:        subgraphURL,
 		subsidizerContract: subsidizerContract,
 		tokenContract:      tokenContract,
 		signer:             privateKey,
 		ownerAddress:       ownerAddress,
+		vaultAddr:          vaultAddr,
 		config:             cfg.Subsidy,
 		logger:             logger,
 		ethClient:          ethClient,
@@ -141,21 +146,36 @@ func (s *Service) gather(ctx context.Context, epoch uint64) ([]Recipient, error)
 	return recipients, nil
 }
 
-func (s *Service) processPayments(ctx context.Context, recipients []Recipient) error {
+func (s *Service) processPayments(ctx context.Context, root [32]byte, proofs map[[20]byte][][]byte, recipients []Recipient) error {
 	if len(recipients) == 0 {
 		return nil
 	}
 
 	s.logger.Info("Processing payment batch", zap.Int("count", len(recipients)))
 
-	var (
-		addresses []common.Address
-		amounts   []*big.Int
-	)
+	vaultAddress := s.vaultAddr
+
+	var claims []contracts.IDebtSubsidizerClaimData
+	var vaultAddresses []common.Address
 
 	for _, r := range recipients {
-		addresses = append(addresses, r.Address)
-		amounts = append(amounts, r.Amount)
+		var addrKey [20]byte
+		copy(addrKey[:], r.Address.Bytes())
+
+		proofBytes := proofs[addrKey]
+		var merkleProof [][32]byte
+		for _, b := range proofBytes {
+			var tmp [32]byte
+			copy(tmp[:], b)
+			merkleProof = append(merkleProof, tmp)
+		}
+
+		claims = append(claims, contracts.IDebtSubsidizerClaimData{
+			Recipient:   r.Address,
+			TotalEarned: r.Amount,
+			MerkleProof: merkleProof,
+		})
+		vaultAddresses = append(vaultAddresses, vaultAddress)
 	}
 
 	nonce, err := s.ethClient.PendingNonceAt(ctx, s.ownerAddress)
@@ -182,18 +202,6 @@ func (s *Service) processPayments(ctx context.Context, recipients []Recipient) e
 	auth.Value = big.NewInt(0)
 	auth.GasLimit = uint64(0)
 	auth.GasTipCap = gasTipCap
-
-	var vaultAddresses []common.Address
-	var claims []contracts.IDebtSubsidizerClaimData
-
-	for i := range addresses {
-		vaultAddresses = append(vaultAddresses, common.HexToAddress("0x0000000000000000000000000000000000000000"))
-		claims = append(claims, contracts.IDebtSubsidizerClaimData{
-			Recipient:   addresses[i],
-			TotalEarned: amounts[i],
-			MerkleProof: [][32]byte{},
-		})
-	}
 
 	tx, err := s.subsidizerContract.Transact(auth, "claimAllSubsidies", vaultAddresses, claims)
 	if err != nil {
@@ -228,6 +236,18 @@ func (s *Service) Run(ctx context.Context, epoch uint64) error {
 		return nil
 	}
 
+	// Build Merkle tree for all recipients
+	pairs := make([]merkletree.Pair, len(recipients))
+	for i, r := range recipients {
+		pairs[i] = merkletree.Pair{Account: r.Address, Amount: r.Amount}
+	}
+	root, proofs := merkletree.BuildPairs(pairs)
+
+	// Update Merkle root on the contract
+	if err := s.updateMerkleRoot(ctx, root); err != nil {
+		return fmt.Errorf("failed to update merkle root: %w", err)
+	}
+
 	s.logger.Info("Total recipients to process", zap.Int("count", len(recipients)))
 
 	batchSize := s.config.SubsidyBatchSize
@@ -238,7 +258,7 @@ func (s *Service) Run(ctx context.Context, epoch uint64) error {
 		}
 		batch := recipients[i:end]
 
-		err := s.processPayments(ctx, batch)
+		err := s.processPayments(ctx, root, proofs, batch)
 		if err != nil {
 			s.logger.Error("Failed to process payment batch", zap.Error(err), zap.Int("start_index", i), zap.Int("end_index", end))
 			return fmt.Errorf("failed to process batch: %w", err)
@@ -247,6 +267,54 @@ func (s *Service) Run(ctx context.Context, epoch uint64) error {
 	}
 
 	s.logger.Info("Subsidy distribution completed for epoch", zap.Uint64("epoch", epoch))
+	return nil
+}
+
+// updateMerkleRoot submits a transaction to update the Merkle root for the
+// configured vault.
+func (s *Service) updateMerkleRoot(ctx context.Context, root [32]byte) error {
+	nonce, err := s.ethClient.PendingNonceAt(ctx, s.ownerAddress)
+	if err != nil {
+		return fmt.Errorf("failed to get nonce: %w", err)
+	}
+
+	gasTipCap := s.config.SubsidyPayoutGasTip
+	if gasTipCap.Cmp(big.NewInt(0)) == 0 {
+		suggestedGasTip, err := s.ethClient.SuggestGasTipCap(ctx)
+		if err != nil {
+			s.logger.Warn("Failed to suggest gas tip cap, using default 0", zap.Error(err))
+			gasTipCap = big.NewInt(0)
+		} else {
+			gasTipCap = suggestedGasTip
+		}
+	}
+
+	auth, err := bind.NewKeyedTransactorWithChainID(s.signer, s.chainID)
+	if err != nil {
+		return fmt.Errorf("failed to create transactor: %w", err)
+	}
+	auth.Nonce = big.NewInt(int64(nonce))
+	auth.Value = big.NewInt(0)
+	auth.GasLimit = uint64(0)
+	auth.GasTipCap = gasTipCap
+
+	vaultAddr := s.vaultAddr
+	tx, err := s.subsidizerContract.Transact(auth, "updateMerkleRoot", vaultAddr, root)
+	if err != nil {
+		return fmt.Errorf("failed to send updateMerkleRoot transaction: %w", err)
+	}
+
+	s.logger.Info("updateMerkleRoot transaction sent", zap.String("tx_hash", tx.Hash().Hex()))
+	receipt, err := bind.WaitMined(ctx, s.ethClient, tx)
+	if err != nil {
+		return fmt.Errorf("failed to mine updateMerkleRoot transaction: %w", err)
+	}
+
+	if receipt.Status != types.ReceiptStatusSuccessful {
+		return fmt.Errorf("updateMerkleRoot transaction failed: %s", receipt.TxHash.Hex())
+	}
+
+	s.logger.Info("Merkle root updated", zap.String("tx_hash", receipt.TxHash.Hex()))
 	return nil
 }
 
