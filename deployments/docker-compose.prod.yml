@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  go-server:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - RPC_HTTP_URL=${RPC_HTTP_URL}
+      - RPC_WS_URL=${RPC_WS_URL}
+      - PRIVATE_KEY=${PRIVATE_KEY}
+      - SUBGRAPH_URL=${SUBGRAPH_URL}
+      - EPOCH_MANAGER_ADDR=${EPOCH_MANAGER_ADDR}
+      - VAULT_ADDR=${VAULT_ADDR}
+      - CHAIN_ID=${CHAIN_ID:-1}
+      - HTTP_PORT=${HTTP_PORT:-8080}
+      - SUBSIDIZER_ADDR=${SUBSIDIZER_ADDR}
+      - SUBSIDY_TOKEN_ADDR=${SUBSIDY_TOKEN_ADDR}
+      - SUBSIDY_MIN_AMOUNT=${SUBSIDY_MIN_AMOUNT}
+      - SUBSIDY_BATCH_SIZE=${SUBSIDY_BATCH_SIZE:-100}
+      - SUBSIDY_PAYOUT_GASTIP=${SUBSIDY_PAYOUT_GASTIP}
+      - ADMIN_TOKEN=${ADMIN_TOKEN}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - go-server-network
+
+networks:
+  go-server-network:
+    driver: bridge

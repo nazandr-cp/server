@@ -24,19 +24,22 @@ var (
 	_ = abi.ConvertType
 )
 
-// ICollectionRegistryWeightFunction is an auto generated low-level Go binding around an user-defined struct.
-type ICollectionRegistryWeightFunction struct {
-	FnType uint8
-	P1     *big.Int
-	P2     *big.Int
-}
-
 // IDebtSubsidizerClaimData is an auto generated low-level Go binding around an user-defined struct.
 type IDebtSubsidizerClaimData struct {
 	Recipient   common.Address
 	Collection  common.Address
 	Amount      *big.Int
 	MerkleProof [][32]byte
+}
+
+// IDebtSubsidizerSubsidy is an auto generated low-level Go binding around an user-defined struct.
+type IDebtSubsidizerSubsidy struct {
+	Account    common.Address
+	Collection common.Address
+	Vault      common.Address
+	Amount     *big.Int
+	Nonce      *big.Int
+	Deadline   *big.Int
 }
 
 // IDebtSubsidizerVaultInfo is an auto generated low-level Go binding around an user-defined struct.

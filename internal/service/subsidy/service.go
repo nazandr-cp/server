@@ -15,9 +15,9 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"go.uber.org/zap"
 
+	config "go-server/configs"
 	"go-server/contracts"
-	"go-server/internal/config"
-	"go-server/internal/gql"
+	gql "go-server/internal/platform/graphql"
 )
 
 // Recipient represents an account eligible for subsidy

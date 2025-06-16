@@ -15,7 +15,7 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 
 	"go-server/contracts"
-	"go-server/services/subsidy"
+	"go-server/internal/service/subsidy"
 )
 
 const (
