@@ -6,6 +6,7 @@ import (
 	"crypto/ecdsa"
 	"fmt"
 	"math/big"
+	"sort"
 	"strings"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -236,6 +237,15 @@ func (s *Service) Run(ctx context.Context, epoch uint64) error {
 		s.logger.Info("No recipients found for subsidy in this epoch.")
 		return nil
 	}
+
+	// Ensure deterministic ordering of recipients before building the Merkle tree
+	sort.Slice(recipients, func(i, j int) bool {
+		cmp := bytes.Compare(recipients[i].Address.Bytes(), recipients[j].Address.Bytes())
+		if cmp == 0 {
+			return recipients[i].Amount.Cmp(recipients[j].Amount) < 0
+		}
+		return cmp < 0
+	})
 
 	// Build Merkle tree for all recipients
 	pairs := make([]merkletree.Pair, len(recipients))

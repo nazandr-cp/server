@@ -70,6 +70,17 @@ func Build(leaves []Leaf) (root [32]byte, proofs map[[20]byte][][]byte) {
 // is hashed as keccak256(account, amount). It returns the Merkle root and a map
 // of proofs keyed by the account address bytes.
 func BuildPairs(pairs []Pair) (root [32]byte, proofs map[[20]byte][][]byte) {
+	// Validate that the slice is sorted by address and amount to ensure
+	// deterministic Merkle root generation.
+	for i := 1; i < len(pairs); i++ {
+		prev := pairs[i-1]
+		curr := pairs[i]
+		addrCmp := bytes.Compare(prev.Account.Bytes(), curr.Account.Bytes())
+		if addrCmp > 0 || (addrCmp == 0 && prev.Amount.Cmp(curr.Amount) > 0) {
+			panic("unsorted recipients")
+		}
+	}
+
 	proofs = make(map[[20]byte][][]byte, len(pairs))
 	if len(pairs) == 0 {
 		return root, proofs
