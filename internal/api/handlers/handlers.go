@@ -60,7 +60,7 @@ func Register(r chi.Router, d Deps) {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
-	r.Get("/healthz", healthz)
+	r.Get("/health", health)
 	r.Get("/ws", d.Hub.ServeWS)
 	r.Get("/epochs/current", currentEpoch(d))
 
@@ -95,7 +95,7 @@ func Register(r chi.Router, d Deps) {
 	})
 }
 
-func healthz(w http.ResponseWriter, r *http.Request) {
+func health(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("ok"))
 }

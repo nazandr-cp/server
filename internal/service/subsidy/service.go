@@ -1,6 +1,7 @@
 package subsidy
 
 import (
+	"bytes"
 	"context"
 	"crypto/ecdsa"
 	"fmt"
@@ -497,4 +498,132 @@ func (s *Service) GetClaimStatus(ctx context.Context, userAddr common.Address, e
 	}
 
 	return nil, fmt.Errorf("no claim found for user %s in epoch %s", userAddr.Hex(), epochID)
+}
+
+// GetUserSubsidyDistributions gets all subsidy distributions for a user in an epoch
+func (s *Service) GetUserSubsidyDistributions(ctx context.Context, userAddr common.Address, epochID string) ([]*gql.SubsidyDistribution, error) {
+	query := gql.GetSubsidyDistributionsByEpochQuery()
+
+	variables := map[string]interface{}{
+		"epochId": epochID,
+		"first":   1000,
+		"skip":    0,
+	}
+
+	client := graphql.NewClient(s.subgraphURL)
+	var result gql.SubsidyDistributionResponse
+	err := client.QueryWithVariables(ctx, query, variables, &result)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query subsidy distributions: %w", err)
+	}
+
+	var userDistributions []*gql.SubsidyDistribution
+	for _, distribution := range result.SubsidyDistributions {
+		if distribution.User != nil && distribution.User.ID == userAddr.Hex() {
+			userDistributions = append(userDistributions, distribution)
+		}
+	}
+
+	return userDistributions, nil
+}
+
+// GetUserClaimHistory gets all historical claims for a user across all epochs
+func (s *Service) GetUserClaimHistory(ctx context.Context, userAddr common.Address) ([]*gql.SubsidyDistribution, error) {
+	query := gql.GetSubsidyDistributionsQuery()
+
+	variables := map[string]interface{}{
+		"first": 1000,
+		"skip":  0,
+		"where": map[string]interface{}{
+			"user": userAddr.Hex(),
+		},
+	}
+
+	client := graphql.NewClient(s.subgraphURL)
+	var result gql.SubsidyDistributionResponse
+	err := client.QueryWithVariables(ctx, query, variables, &result)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query user claim history: %w", err)
+	}
+
+	return result.SubsidyDistributions, nil
+}
+
+// GetMerkleDistribution gets merkle distribution data for an epoch and vault
+func (s *Service) GetMerkleDistribution(ctx context.Context, epochID, vaultID string) (*gql.MerkleDistribution, error) {
+	query := gql.GetMerkleDistributionByEpochAndVaultQuery()
+
+	variables := map[string]interface{}{
+		"epochId": epochID,
+		"vaultId": vaultID,
+	}
+
+	client := graphql.NewClient(s.subgraphURL)
+	var result gql.MerkleDistributionResponse
+	err := client.QueryWithVariables(ctx, query, variables, &result)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query merkle distribution: %w", err)
+	}
+
+	if len(result.MerkleDistributions) == 0 {
+		return nil, fmt.Errorf("no merkle distribution found for epoch %s and vault %s", epochID, vaultID)
+	}
+
+	return result.MerkleDistributions[0], nil
+}
+
+// GetLatestMerkleDistributions gets the latest merkle distributions for a vault
+func (s *Service) GetLatestMerkleDistributions(ctx context.Context, vaultID string) ([]*gql.MerkleDistribution, error) {
+	query := gql.GetMerkleDistributionsQuery()
+
+	variables := map[string]interface{}{
+		"first": 10,
+		"skip":  0,
+		"where": map[string]interface{}{
+			"vault": vaultID,
+		},
+	}
+
+	client := graphql.NewClient(s.subgraphURL)
+	var result gql.MerkleDistributionResponse
+	err := client.QueryWithVariables(ctx, query, variables, &result)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query latest merkle distributions: %w", err)
+	}
+
+	return result.MerkleDistributions, nil
+}
+
+// VerifyMerkleProof verifies a merkle proof against a root and leaf data
+func (s *Service) VerifyMerkleProof(proof []string, root string, userAddr common.Address, amount *big.Int) (bool, error) {
+	// Convert proof strings to bytes32
+	proofBytes := make([][32]byte, len(proof))
+	for i, p := range proof {
+		proofHash := common.HexToHash(p)
+		copy(proofBytes[i][:], proofHash.Bytes())
+	}
+
+	// Create leaf hash
+	var amt [32]byte
+	if amount != nil {
+		amount.FillBytes(amt[:])
+	}
+	leafHash := merkletree.Keccak256(userAddr.Bytes(), amt[:])
+
+	// Verify proof
+	rootHash := common.HexToHash(root)
+	return s.verifyProof(proofBytes, rootHash, leafHash), nil
+}
+
+// verifyProof verifies a merkle proof
+func (s *Service) verifyProof(proof [][32]byte, root [32]byte, leaf [32]byte) bool {
+	computedHash := leaf
+	for _, proofElement := range proof {
+		if bytes.Compare(computedHash[:], proofElement[:]) < 0 {
+			computedHash = merkletree.Keccak256(computedHash[:], proofElement[:])
+		} else {
+			computedHash = merkletree.Keccak256(proofElement[:], computedHash[:])
+		}
+	}
+	return bytes.Equal(computedHash[:], root[:])
 }

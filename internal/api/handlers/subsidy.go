@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
+	"math/big"
 	"net/http"
 	"strconv"
 
@@ -76,10 +78,9 @@ func GetEligibility(d Deps) http.HandlerFunc {
 		}
 
 		addr := common.HexToAddress(userAddress)
-		vaultAddr := common.HexToAddress(d.Cfg.VaultAddr)
-		collectionAddr := common.Address{} // Would need to be passed as parameter or retrieved
 
-		eligibility, err := d.SubsidyService.CalculateUserEligibility(r.Context(), addr, vaultAddr, collectionAddr)
+		// Check user's eligibility by querying subsidy distributions for this epoch
+		distributions, err := d.SubsidyService.GetUserSubsidyDistributions(r.Context(), addr, strconv.FormatUint(epochId, 10))
 		if err != nil {
 			d.Logger.Error("Failed to check eligibility",
 				zap.Uint64("epochId", epochId),
@@ -87,7 +88,7 @@ func GetEligibility(d Deps) http.HandlerFunc {
 				zap.Error(err))
 			response := SubsidyEligibilityResponse{
 				Eligible: false,
-				Reason:   "Not eligible for subsidy in this epoch",
+				Reason:   "Failed to check eligibility",
 			}
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(response)
@@ -95,11 +96,18 @@ func GetEligibility(d Deps) http.HandlerFunc {
 		}
 
 		response := SubsidyEligibilityResponse{
-			Eligible: eligibility != nil,
+			Eligible: len(distributions) > 0,
 		}
 
-		if eligibility != nil && eligibility.SubsidyReceived != nil {
-			response.Amount = eligibility.SubsidyReceived.String()
+		if len(distributions) > 0 {
+			// Calculate total eligible amount
+			totalAmount := big.NewInt(0)
+			for _, dist := range distributions {
+				if dist.SubsidyAmount != nil {
+					totalAmount.Add(totalAmount, dist.SubsidyAmount)
+				}
+			}
+			response.Amount = totalAmount.String()
 		} else {
 			response.Reason = "Not eligible for subsidy in this epoch"
 		}
@@ -128,19 +136,70 @@ func GetMerkleProof(d Deps) http.HandlerFunc {
 			return
 		}
 
-		// For now, return a placeholder response since we need to implement proper merkle proof retrieval
-		// This would require storing merkle proofs or recalculating them from stored data
-		response := MerkleProofResponse{
-			Proof:    []string{},
-			Amount:   "0",
-			Index:    0,
-			Root:     "0x0000000000000000000000000000000000000000000000000000000000000000",
-			Verified: false,
+		addr := common.HexToAddress(userAddress)
+		vaultID := d.Cfg.VaultAddr
+
+		// Get merkle distribution for this epoch and vault
+		merkleDistribution, err := d.SubsidyService.GetMerkleDistribution(r.Context(), epochIdStr, vaultID)
+		if err != nil {
+			d.Logger.Error("Failed to get merkle distribution",
+				zap.Uint64("epochId", epochId),
+				zap.String("vaultId", vaultID),
+				zap.Error(err))
+			response := MerkleProofResponse{
+				Proof:    []string{},
+				Amount:   "0",
+				Index:    0,
+				Root:     "0x0000000000000000000000000000000000000000000000000000000000000000",
+				Verified: false,
+			}
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(response)
+			return
 		}
 
-		d.Logger.Warn("Merkle proof generation not yet implemented",
+		// Get user's subsidy distributions for this epoch
+		distributions, err := d.SubsidyService.GetUserSubsidyDistributions(r.Context(), addr, epochIdStr)
+		if err != nil || len(distributions) == 0 {
+			d.Logger.Error("No distributions found for user",
+				zap.Uint64("epochId", epochId),
+				zap.String("userAddress", userAddress),
+				zap.Error(err))
+			response := MerkleProofResponse{
+				Proof:    []string{},
+				Amount:   "0",
+				Index:    0,
+				Root:     merkleDistribution.MerkleRoot,
+				Verified: false,
+			}
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(response)
+			return
+		}
+
+		// Calculate total amount for this user
+		totalAmount := big.NewInt(0)
+		for _, dist := range distributions {
+			if dist.SubsidyAmount != nil {
+				totalAmount.Add(totalAmount, dist.SubsidyAmount)
+			}
+		}
+
+		// Generate merkle proof for this user and amount
+		// Note: This requires the original recipients list from the epoch processing
+		// For now, we'll return basic info and indicate that proof generation needs the full recipient set
+		response := MerkleProofResponse{
+			Proof:    []string{}, // Would need full recipient list to regenerate proof
+			Amount:   totalAmount.String(),
+			Index:    0, // Would need to find user's index in the original merkle tree
+			Root:     merkleDistribution.MerkleRoot,
+			Verified: false, // Set to false since we can't verify without the full proof
+		}
+
+		d.Logger.Info("Merkle proof requested but requires full recipient data from epoch processing",
 			zap.Uint64("epochId", epochId),
-			zap.String("userAddress", userAddress))
+			zap.String("userAddress", userAddress),
+			zap.String("amount", totalAmount.String()))
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(response)
@@ -177,17 +236,71 @@ func BatchVerifyClaims(d Deps) http.HandlerFunc {
 				}
 				continue
 			}
-			// For now, return a placeholder validation since we need to implement proper merkle proof verification
-			// This would require access to the stored merkle tree data
-			results[i] = map[string]interface{}{
-				"userAddress": claim.UserAddress,
-				"valid":       false,
-				"error":       "Merkle proof verification not yet implemented",
-				"amount":      claim.Amount,
+
+			// Parse amount
+			amount := big.NewInt(0)
+			if _, ok := amount.SetString(claim.Amount, 10); !ok {
+				results[i] = map[string]interface{}{
+					"userAddress": claim.UserAddress,
+					"valid":       false,
+					"error":       "Invalid amount format",
+				}
+				continue
 			}
 
-			d.Logger.Warn("Merkle proof verification not yet implemented",
-				zap.String("userAddress", claim.UserAddress))
+			// Verify merkle proof
+			userAddr := common.HexToAddress(claim.UserAddress)
+
+			// For verification, we need to get the merkle root for this claim
+			// This would typically be stored with the claim or retrieved from the epoch data
+			// For now, we'll attempt to find the latest merkle root from vault distributions
+
+			// Try to get current epoch merkle distribution
+			vaultID := d.Cfg.VaultAddr
+
+			// Get latest merkle distributions to find a root to verify against
+			merkleDistributions, err := d.SubsidyService.GetLatestMerkleDistributions(r.Context(), vaultID)
+			if err != nil || len(merkleDistributions) == 0 {
+				results[i] = map[string]interface{}{
+					"userAddress": claim.UserAddress,
+					"valid":       false,
+					"error":       "No merkle root found for verification",
+					"amount":      claim.Amount,
+				}
+				continue
+			}
+
+			// Use the most recent merkle root
+			merkleRoot := merkleDistributions[0].MerkleRoot
+
+			// Verify the proof
+			verified, err := d.SubsidyService.VerifyMerkleProof(claim.Proof, merkleRoot, userAddr, amount)
+			if err != nil {
+				results[i] = map[string]interface{}{
+					"userAddress": claim.UserAddress,
+					"valid":       false,
+					"error":       fmt.Sprintf("Verification error: %v", err),
+					"amount":      claim.Amount,
+				}
+				continue
+			}
+
+			results[i] = map[string]interface{}{
+				"userAddress": claim.UserAddress,
+				"valid":       verified,
+				"amount":      claim.Amount,
+				"merkleRoot":  merkleRoot,
+			}
+
+			if verified {
+				d.Logger.Info("Merkle proof verified successfully",
+					zap.String("userAddress", claim.UserAddress),
+					zap.String("amount", claim.Amount))
+			} else {
+				d.Logger.Warn("Merkle proof verification failed",
+					zap.String("userAddress", claim.UserAddress),
+					zap.String("amount", claim.Amount))
+			}
 		}
 
 		response := map[string]interface{}{
@@ -213,10 +326,10 @@ func GetUserClaimStatus(d Deps) http.HandlerFunc {
 
 		addr := common.HexToAddress(userAddress)
 
-		// Get claim status using existing method - note: this returns a single distribution
-		distribution, err := d.SubsidyService.GetClaimStatus(r.Context(), addr, "1") // Using epoch 1 as example
+		// Get all historical claims for this user
+		claims, err := d.SubsidyService.GetUserClaimHistory(r.Context(), addr)
 		if err != nil {
-			d.Logger.Error("Failed to get user claim status",
+			d.Logger.Error("Failed to get user claim history",
 				zap.String("userAddress", userAddress),
 				zap.Error(err))
 			// Return empty status instead of error for better UX
@@ -231,27 +344,45 @@ func GetUserClaimStatus(d Deps) http.HandlerFunc {
 			return
 		}
 
-		response := ClaimStatusResponse{
-			TotalEligible: "0",
-			TotalClaimed:  "0",
-			Pending:       "0",
-			Claims:        []ClaimHistoryInfo{},
+		// Calculate totals and build claim history
+		totalEligible := big.NewInt(0)
+		totalClaimed := big.NewInt(0)
+		var claimHistory []ClaimHistoryInfo
+
+		for _, claim := range claims {
+			if claim.SubsidyAmount != nil {
+				totalEligible.Add(totalEligible, claim.SubsidyAmount)
+				totalClaimed.Add(totalClaimed, claim.SubsidyAmount)
+
+				epochID := uint64(0)
+				if claim.Epoch != nil && claim.Epoch.EpochNumber != nil {
+					epochID = claim.Epoch.EpochNumber.Uint64()
+				}
+
+				timestamp := int64(0)
+				if claim.Timestamp != nil {
+					timestamp = claim.Timestamp.Int64()
+				}
+
+				claimHistory = append(claimHistory, ClaimHistoryInfo{
+					EpochID:   epochID,
+					Amount:    claim.SubsidyAmount.String(),
+					Status:    "claimed",
+					TxHash:    claim.TransactionHash,
+					Timestamp: timestamp,
+				})
+			}
 		}
 
-		if distribution != nil && distribution.SubsidyAmount != nil {
-			response.TotalEligible = distribution.SubsidyAmount.String()
-			// SubsidyDistribution doesn't have a Claimed field, so we assume it's claimed if it exists
-			response.TotalClaimed = distribution.SubsidyAmount.String()
-			response.Pending = "0"
+		// For now, pending is 0 since we're only looking at historical claims
+		// In a more advanced implementation, we could check for unclaimed eligible amounts
+		pending := big.NewInt(0)
 
-			// Add single claim record
-			response.Claims = []ClaimHistoryInfo{{
-				EpochID:   1, // Would need actual epoch ID from distribution.Epoch
-				Amount:    distribution.SubsidyAmount.String(),
-				Status:    "claimed",
-				TxHash:    distribution.TransactionHash,
-				Timestamp: distribution.Timestamp.Int64(),
-			}}
+		response := ClaimStatusResponse{
+			TotalEligible: totalEligible.String(),
+			TotalClaimed:  totalClaimed.String(),
+			Pending:       pending.String(),
+			Claims:        claimHistory,
 		}
 
 		w.Header().Set("Content-Type", "application/json")
