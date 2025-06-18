@@ -24,8 +24,9 @@ import (
 
 // Recipient is an account eligible for subsidy.
 type Recipient struct {
-	Address common.Address
-	Amount  *big.Int
+	Address     common.Address
+	TotalEarned *big.Int
+	PrevClaimed *big.Int
 }
 
 // Service manages the subsidy distribution process.
@@ -94,59 +95,6 @@ func NewService(cfg config.Config, logger *zap.Logger) (*Service, error) {
 	}, nil
 }
 
-func (s *Service) gather(ctx context.Context, epoch uint64) ([]Recipient, error) {
-	s.logger.Info("Gathering recipients for epoch", zap.Uint64("epoch", epoch))
-
-	var recipients []Recipient
-	skip := 0
-	first := 1000
-
-	for {
-		query := fmt.Sprintf(`
-		query GetAccounts($skip: Int!, $first: Int!, $minAmount: BigInt!) {
-			accounts(first: $first, skip: $skip, where: {subsidyEarned_gt: "%s"}) {
-				id
-				subsidyEarned
-			}
-		}
-	`, s.config.SubsidyMinAmount.String())
-
-		var result struct {
-			Accounts []struct {
-				ID            string `json:"id"`
-				SubsidyEarned string `json:"subsidyEarned"`
-			} `json:"accounts"`
-		}
-
-		err := graphql.Query(ctx, s.subgraphURL, query, &result)
-		if err != nil {
-			return nil, fmt.Errorf("failed to query subgraph: %w", err)
-		}
-
-		if len(result.Accounts) == 0 {
-			break
-		}
-
-		for _, acc := range result.Accounts {
-			address := common.HexToAddress(acc.ID)
-			amount, ok := new(big.Int).SetString(acc.SubsidyEarned, 10)
-			if !ok {
-				s.logger.Warn("Failed to parse subsidyEarned amount", zap.String("amount", acc.SubsidyEarned))
-				continue
-			}
-			recipients = append(recipients, Recipient{Address: address, Amount: amount})
-		}
-
-		if len(result.Accounts) < first {
-			break
-		}
-		skip += first
-	}
-
-	s.logger.Info("Finished gathering recipients", zap.Int("count", len(recipients)))
-	return recipients, nil
-}
-
 func (s *Service) processPayments(ctx context.Context, root [32]byte, proofs map[[20]byte][][]byte, recipients []Recipient) error {
 	if len(recipients) == 0 {
 		return nil
@@ -173,7 +121,7 @@ func (s *Service) processPayments(ctx context.Context, root [32]byte, proofs map
 
 		claims = append(claims, contracts.IDebtSubsidizerClaimData{
 			Recipient:   r.Address,
-			TotalEarned: r.Amount,
+			TotalEarned: r.TotalEarned,
 			MerkleProof: merkleProof,
 		})
 		vaultAddresses = append(vaultAddresses, vaultAddress)
@@ -238,11 +186,11 @@ func (s *Service) Run(ctx context.Context, epoch uint64) error {
 	}
 
 	// Build Merkle tree for all recipients
-	pairs := make([]merkletree.Pair, len(recipients))
+	mtRecipients := make([]merkletree.Recipient, len(recipients))
 	for i, r := range recipients {
-		pairs[i] = merkletree.Pair{Account: r.Address, Amount: r.Amount}
+		mtRecipients[i] = merkletree.Recipient{Address: r.Address, TotalEarned: r.TotalEarned}
 	}
-	root, proofs := merkletree.BuildPairs(pairs)
+	root, proofs := merkletree.BuildTree(mtRecipients)
 
 	// Update Merkle root on the contract
 	if err := s.updateMerkleRoot(ctx, root); err != nil {
@@ -370,12 +318,12 @@ func (s *Service) CalculateUserEligibility(ctx context.Context, userAddr, vaultA
 }
 
 func (s *Service) GenerateMerkleProof(ctx context.Context, userAddr common.Address, amount *big.Int, recipients []Recipient) ([][32]byte, error) {
-	pairs := make([]merkletree.Pair, len(recipients))
+	mtRecipients := make([]merkletree.Recipient, len(recipients))
 	for i, r := range recipients {
-		pairs[i] = merkletree.Pair{Account: r.Address, Amount: r.Amount}
+		mtRecipients[i] = merkletree.Recipient{Address: r.Address, TotalEarned: r.TotalEarned}
 	}
 
-	_, proofs := merkletree.BuildPairs(pairs)
+	_, proofs := merkletree.BuildTree(mtRecipients)
 
 	var addrKey [20]byte
 	copy(addrKey[:], userAddr.Bytes())
