@@ -15,14 +15,14 @@ import (
 	"github.com/go-chi/chi/v5"
 	"go.uber.org/zap"
 
-	config "go-server/configs"
-	"go-server/internal/api/handlers"
-	eth "go-server/internal/platform/ethereum"
-	ws "go-server/internal/platform/websocket"
-	"go-server/internal/service/collection"
-	"go-server/internal/service/datacollector"
-	epochscheduler "go-server/internal/service/epoch"
-	"go-server/internal/service/subsidy"
+	config "lend.fam/go-server/configs"
+	"lend.fam/go-server/internal/api/handlers"
+	eth "lend.fam/go-server/internal/platform/ethereum"
+	ws "lend.fam/go-server/internal/platform/websocket"
+	"lend.fam/go-server/internal/service/collection"
+	"lend.fam/go-server/internal/service/datacollector"
+	epochscheduler "lend.fam/go-server/internal/service/epoch"
+	"lend.fam/go-server/internal/service/subsidy"
 )
 
 func main() {

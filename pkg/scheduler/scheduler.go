@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	eth "go-server/internal/platform/ethereum"
-	ws "go-server/internal/platform/websocket"
+	eth "lend.fam/go-server/internal/platform/ethereum"
+	ws "lend.fam/go-server/internal/platform/websocket"
 )
 
 // Run starts the main loop that reacts to blockchain events and ticks.

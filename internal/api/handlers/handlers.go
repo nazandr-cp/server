@@ -12,7 +12,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"go.uber.org/zap"
 
-	"go-server/internal/gql"
+	"lend.fam/go-server/internal/gql"
 
 	config "lend.fam/go-server/configs"
 	eth "lend.fam/go-server/internal/platform/ethereum"

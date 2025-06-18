@@ -8,8 +8,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"go.uber.org/zap"
-
-	"go-server/internal/platform/graphql"
+	"lend.fam/go-server/internal/platform/graphql"
 )
 
 // gather collects total earned and previously claimed amounts for all recipients.
