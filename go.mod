@@ -1,4 +1,4 @@
-module go-server
+module lend.fam/go-server
 
 go 1.23.0
 

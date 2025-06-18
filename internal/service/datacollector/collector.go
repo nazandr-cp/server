@@ -3,9 +3,10 @@ package datacollector
 import (
 	"context"
 	"fmt"
-	"go-server/contracts"
 	"log"
 	"math/big"
+
+	"lend.fam/go-server/contracts"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"

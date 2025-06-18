@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"strconv"
 	"strings"
@@ -11,12 +12,13 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"go.uber.org/zap"
 
-	config "go-server/configs"
 	"go-server/internal/gql"
-	eth "go-server/internal/platform/ethereum"
-	ws "go-server/internal/platform/websocket"
-	"go-server/internal/service/collection"
-	"go-server/internal/service/subsidy"
+
+	config "lend.fam/go-server/configs"
+	eth "lend.fam/go-server/internal/platform/ethereum"
+	ws "lend.fam/go-server/internal/platform/websocket"
+	"lend.fam/go-server/internal/service/collection"
+	"lend.fam/go-server/internal/service/subsidy"
 )
 
 type Deps struct {
@@ -60,7 +62,7 @@ func Register(r chi.Router, d Deps) {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
-	r.Get("/health", health)
+	r.Get("/healthz", healthz)
 	r.Get("/ws", d.Hub.ServeWS)
 	r.Get("/epochs/current", currentEpoch(d))
 
@@ -71,6 +73,11 @@ func Register(r chi.Router, d Deps) {
 		apiRouter.Get("/epochs/{epochId}/merkle-proof/{userAddress}", GetMerkleProof(d))
 		apiRouter.Post("/claims/batch-verify", BatchVerifyClaims(d))
 		apiRouter.Get("/users/{address}/claim-status", GetUserClaimStatus(d))
+		apiRouter.Get("/subsidies", GetSubsidies(d))
+		apiRouter.Get("/users/{address}/debt", GetUserDebt(d))
+
+		// Users endpoints
+		apiRouter.Get("/users/{address}/vault-balance", GetUserVaultBalance(d))
 
 		// Analytics endpoints
 		apiRouter.Get("/system/metrics", GetSystemMetrics(d))
@@ -95,9 +102,13 @@ func Register(r chi.Router, d Deps) {
 	})
 }
 
-func health(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("ok"))
+func healthz(w http.ResponseWriter, r *http.Request) {
+	resp := map[string]string{
+		"status":    "ok",
+		"timestamp": time.Now().Format(time.RFC3339),
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(resp)
 }
 
 func currentEpoch(d Deps) http.HandlerFunc {

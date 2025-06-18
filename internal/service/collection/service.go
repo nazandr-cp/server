@@ -9,10 +9,10 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"go.uber.org/zap"
 
-	config "go-server/configs"
-	"go-server/contracts"
-	"go-server/internal/gql"
-	"go-server/internal/platform/graphql"
+	config "lend.fam/go-server/configs"
+	"lend.fam/go-server/contracts"
+	"lend.fam/go-server/internal/gql"
+	"lend.fam/go-server/internal/platform/graphql"
 )
 
 // Service manages collection operations and data.

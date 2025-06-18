@@ -337,3 +337,110 @@ func GetActiveCollections(d Deps) http.HandlerFunc {
 		json.NewEncoder(w).Encode(response)
 	}
 }
+
+// CollectionDepositsResponse is collection deposits information.
+type CollectionDepositsResponse struct {
+	CollectionAddress string                  `json:"collectionAddress"`
+	TotalDeposits     string                  `json:"totalDeposits"`
+	TotalNFTs         string                  `json:"totalNFTs"`
+	Deposits          []CollectionDepositInfo `json:"deposits"`
+}
+
+// CollectionDepositInfo is individual deposit info.
+type CollectionDepositInfo struct {
+	UserAddress     string `json:"userAddress"`
+	NFTTokenId      string `json:"nftTokenId"`
+	DepositAmount   string `json:"depositAmount"`
+	Timestamp       int64  `json:"timestamp"`
+	TransactionHash string `json:"transactionHash"`
+	BlockNumber     string `json:"blockNumber"`
+}
+
+// GetCollectionDeposits handles GET /api/collections/{collection}/deposits
+func GetCollectionDeposits(d Deps) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		collectionAddress := chi.URLParam(r, "collection")
+
+		if !common.IsHexAddress(collectionAddress) {
+			d.Logger.Error("Invalid collection address", zap.String("collectionAddress", collectionAddress))
+			http.Error(w, "Invalid collection address", http.StatusBadRequest)
+			return
+		}
+
+		query := `{
+			collectionParticipations(where: {collection: "` + collectionAddress + `"}, first: 1000) {
+				id
+				principalDeposited
+				collection {
+					id
+					contractAddress
+					name
+					totalNFTsDeposited
+				}
+				vault {
+					id
+				}
+				createdAtTimestamp
+				updatedAtTimestamp
+			}
+		}`
+
+		var result struct {
+			CollectionParticipations []*gql.CollectionParticipation `json:"collectionParticipations"`
+		}
+
+		if err := gql.Query(r.Context(), d.Cfg.SubgraphURL, query, &result); err != nil {
+			d.Logger.Error("Failed to query collection deposits",
+				zap.String("collectionAddress", collectionAddress),
+				zap.Error(err))
+			http.Error(w, "Failed to get collection deposits", http.StatusInternalServerError)
+			return
+		}
+
+		response := CollectionDepositsResponse{
+			CollectionAddress: collectionAddress,
+			TotalDeposits:     "0",
+			TotalNFTs:         "0",
+			Deposits:          []CollectionDepositInfo{},
+		}
+
+		totalDeposits := int64(0)
+		totalNFTs := int64(0)
+
+		for _, participation := range result.CollectionParticipations {
+			if participation.PrincipalDeposited != nil {
+				totalDeposits += participation.PrincipalDeposited.Int64()
+			}
+
+			depositInfo := CollectionDepositInfo{
+				UserAddress:     participation.ID,
+				NFTTokenId:      "N/A",
+				DepositAmount:   "0",
+				Timestamp:       0,
+				TransactionHash: "N/A",
+				BlockNumber:     "N/A",
+			}
+
+			if participation.PrincipalDeposited != nil {
+				depositInfo.DepositAmount = participation.PrincipalDeposited.String()
+			}
+			if participation.CreatedAtTimestamp != nil {
+				depositInfo.Timestamp = participation.CreatedAtTimestamp.Int64()
+			}
+
+			response.Deposits = append(response.Deposits, depositInfo)
+		}
+
+		if len(result.CollectionParticipations) > 0 && result.CollectionParticipations[0].Collection != nil {
+			if result.CollectionParticipations[0].Collection.TotalNFTsDeposited != nil {
+				totalNFTs = result.CollectionParticipations[0].Collection.TotalNFTsDeposited.Int64()
+			}
+		}
+
+		response.TotalDeposits = strconv.FormatInt(totalDeposits, 10)
+		response.TotalNFTs = strconv.FormatInt(totalNFTs, 10)
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	}
+}

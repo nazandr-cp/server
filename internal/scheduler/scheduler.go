@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"go-server/internal/eth"
-	"go-server/internal/ws"
+	"lend.fam/go-server/internal/eth"
+	"lend.fam/go-server/internal/ws"
 )
 
 // Run starts the main loop that reacts to blockchain events and ticks.

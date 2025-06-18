@@ -13,8 +13,8 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 
-	"go-server/contracts"
-	"go-server/internal/config"
+	"lend.fam/go-server/contracts"
+	"lend.fam/go-server/internal/config"
 )
 
 // Clients bundles Ethereum related clients and contracts.

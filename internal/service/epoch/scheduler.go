@@ -14,8 +14,8 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 
-	"go-server/contracts"
-	"go-server/internal/service/subsidy"
+	"lend.fam/go-server/contracts"
+	"lend.fam/go-server/internal/service/subsidy"
 )
 
 const (

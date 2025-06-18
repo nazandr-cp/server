@@ -389,3 +389,58 @@ func GetUserClaimStatus(d Deps) http.HandlerFunc {
 		json.NewEncoder(w).Encode(response)
 	}
 }
+
+// GetSubsidies handles GET /api/v1/subsidies
+func GetSubsidies(d Deps) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		distributions, err := d.SubsidyService.GetAllSubsidyDistributions(r.Context())
+		if err != nil {
+			d.Logger.Error("Failed to get all subsidy distributions", zap.Error(err))
+			http.Error(w, "Failed to get all subsidy distributions", http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(distributions)
+	}
+}
+
+// GetUserDebt handles GET /api/v1/users/{address}/debt
+func GetUserDebt(d Deps) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		userAddress := chi.URLParam(r, "address")
+
+		if !common.IsHexAddress(userAddress) {
+			d.Logger.Error("Invalid user address", zap.String("userAddress", userAddress))
+			http.Error(w, "Invalid user address", http.StatusBadRequest)
+			return
+		}
+
+		addr := common.HexToAddress(userAddress)
+
+		// Get all historical claims for this user
+		claims, err := d.SubsidyService.GetUserClaimHistory(r.Context(), addr)
+		if err != nil {
+			d.Logger.Error("Failed to get user claim history for debt",
+				zap.String("userAddress", userAddress),
+				zap.Error(err))
+			http.Error(w, "Failed to get user debt", http.StatusInternalServerError)
+			return
+		}
+
+		totalDebt := big.NewInt(0)
+		for _, claim := range claims {
+			if claim.SubsidyAmount != nil {
+				totalDebt.Add(totalDebt, claim.SubsidyAmount)
+			}
+		}
+
+		response := map[string]string{
+			"userAddress": userAddress,
+			"totalDebt":   totalDebt.String(),
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	}
+}

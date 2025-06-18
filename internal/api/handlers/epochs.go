@@ -405,3 +405,162 @@ func GetEpochCollections(d Deps) http.HandlerFunc {
 		json.NewEncoder(w).Encode(response)
 	}
 }
+
+// GetEpoch handles GET /api/epochs/{epochId}
+func GetEpoch(d Deps) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		epochIdStr := chi.URLParam(r, "epochId")
+
+		epochId, err := strconv.ParseUint(epochIdStr, 10, 64)
+		if err != nil {
+			d.Logger.Error("Invalid epoch ID", zap.String("epochId", epochIdStr), zap.Error(err))
+			http.Error(w, "Invalid epoch ID", http.StatusBadRequest)
+			return
+		}
+
+		query := `{
+			epochs(where: {epochNumber: "` + epochIdStr + `"}) {
+				id
+				epochNumber
+				status
+				startTimestamp
+				endTimestamp
+				processingStartedTimestamp
+				processingCompletedTimestamp
+				totalYieldAvailable
+				totalYieldAllocated
+				totalYieldDistributed
+				remainingYield
+				totalSubsidiesDistributed
+				totalEligibleUsers
+				totalParticipatingCollections
+				participantCount
+				processingTimeMs
+				estimatedProcessingTime
+				processingGasUsed
+				processingTransactionCount
+			}
+		}`
+
+		var result struct {
+			Epochs []*gql.Epoch `json:"epochs"`
+		}
+
+		if err := gql.Query(r.Context(), d.Cfg.SubgraphURL, query, &result); err != nil {
+			d.Logger.Error("Failed to query epoch",
+				zap.Uint64("epochId", epochId),
+				zap.Error(err))
+			http.Error(w, "Failed to get epoch", http.StatusInternalServerError)
+			return
+		}
+
+		if len(result.Epochs) == 0 {
+			d.Logger.Info("Epoch not found", zap.Uint64("epochId", epochId))
+			http.Error(w, "Epoch not found", http.StatusNotFound)
+			return
+		}
+
+		epoch := result.Epochs[0]
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(epoch)
+	}
+}
+
+// GetEpochAnalytics handles GET /api/analytics/epoch/{epochId}
+func GetEpochAnalytics(d Deps) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		epochIdStr := chi.URLParam(r, "epochId")
+
+		epochId, err := strconv.ParseUint(epochIdStr, 10, 64)
+		if err != nil {
+			d.Logger.Error("Invalid epoch ID", zap.String("epochId", epochIdStr), zap.Error(err))
+			http.Error(w, "Invalid epoch ID", http.StatusBadRequest)
+			return
+		}
+
+		query := `{
+			epochs(where: {epochNumber: "` + epochIdStr + `"}) {
+				id
+				epochNumber
+				status
+				startTimestamp
+				endTimestamp
+				totalYieldAvailable
+				totalYieldAllocated
+				totalYieldDistributed
+				remainingYield
+				totalSubsidiesDistributed
+				totalEligibleUsers
+				totalParticipatingCollections
+				participantCount
+				processingTimeMs
+				vaultAllocations {
+					id
+					vault {
+						id
+					}
+					yieldAllocated
+					subsidiesDistributed
+					participantCount
+					averageSubsidyPerUser
+					utilizationRate
+				}
+				subsidyDistributions {
+					id
+					user {
+						id
+					}
+					collection {
+						id
+						contractAddress
+						name
+					}
+					subsidyAmount
+					nftBalance
+				}
+			}
+		}`
+
+		var result struct {
+			Epochs []*gql.Epoch `json:"epochs"`
+		}
+
+		if err := gql.Query(r.Context(), d.Cfg.SubgraphURL, query, &result); err != nil {
+			d.Logger.Error("Failed to query epoch analytics",
+				zap.Uint64("epochId", epochId),
+				zap.Error(err))
+			http.Error(w, "Failed to get epoch analytics", http.StatusInternalServerError)
+			return
+		}
+
+		if len(result.Epochs) == 0 {
+			d.Logger.Info("Epoch not found", zap.Uint64("epochId", epochId))
+			http.Error(w, "Epoch not found", http.StatusNotFound)
+			return
+		}
+
+		epoch := result.Epochs[0]
+
+		analytics := map[string]interface{}{
+			"epochId":                       epoch.ID,
+			"epochNumber":                   epoch.EpochNumber,
+			"status":                        epoch.Status,
+			"startTimestamp":                epoch.StartTimestamp,
+			"endTimestamp":                  epoch.EndTimestamp,
+			"totalYieldAvailable":           epoch.TotalYieldAvailable,
+			"totalYieldAllocated":           epoch.TotalYieldAllocated,
+			"totalYieldDistributed":         epoch.TotalYieldDistributed,
+			"remainingYield":                epoch.RemainingYield,
+			"totalSubsidiesDistributed":     epoch.TotalSubsidiesDistributed,
+			"totalEligibleUsers":            epoch.TotalEligibleUsers,
+			"totalParticipatingCollections": epoch.TotalParticipatingCollections,
+			"participantCount":              epoch.ParticipantCount,
+			"processingTimeMs":              epoch.ProcessingTimeMs,
+			"vaultAllocations":              epoch.VaultAllocations,
+			"subsidyDistributions":          epoch.SubsidyDistributions,
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(analytics)
+	}
+}

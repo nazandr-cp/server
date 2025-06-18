@@ -15,11 +15,11 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"go.uber.org/zap"
 
-	config "go-server/configs"
-	"go-server/contracts"
-	"go-server/internal/gql"
-	"go-server/internal/platform/graphql"
-	"go-server/pkg/merkletree"
+	config "lend.fam/go-server/configs"
+	"lend.fam/go-server/contracts"
+	"lend.fam/go-server/internal/gql"
+	"lend.fam/go-server/internal/platform/graphql"
+	"lend.fam/go-server/pkg/merkletree"
 )
 
 // Recipient is an account eligible for subsidy.
@@ -544,6 +544,25 @@ func (s *Service) GetUserClaimHistory(ctx context.Context, userAddr common.Addre
 	err := client.QueryWithVariables(ctx, query, variables, &result)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query user claim history: %w", err)
+	}
+
+	return result.SubsidyDistributions, nil
+}
+
+// GetAllSubsidyDistributions gets all historical subsidy distributions
+func (s *Service) GetAllSubsidyDistributions(ctx context.Context) ([]*gql.SubsidyDistribution, error) {
+	query := gql.GetSubsidyDistributionsQuery()
+
+	variables := map[string]interface{}{
+		"first": 1000, // Fetch a reasonable number, consider pagination for very large datasets
+		"skip":  0,
+	}
+
+	client := graphql.NewClient(s.subgraphURL)
+	var result gql.SubsidyDistributionResponse
+	err := client.QueryWithVariables(ctx, query, variables, &result)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query all subsidy distributions: %w", err)
 	}
 
 	return result.SubsidyDistributions, nil

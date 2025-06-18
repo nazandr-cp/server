@@ -11,11 +11,11 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"go.uber.org/zap"
 
-	"go-server/internal/config"
-	"go-server/internal/eth"
-	"go-server/internal/gql"
-	"go-server/internal/service/subsidy"
-	"go-server/internal/ws"
+	"lend.fam/go-server/internal/config"
+	"lend.fam/go-server/internal/eth"
+	"lend.fam/go-server/internal/gql"
+	"lend.fam/go-server/internal/service/subsidy"
+	"lend.fam/go-server/internal/ws"
 )
 
 type Deps struct {

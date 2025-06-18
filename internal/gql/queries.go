@@ -859,6 +859,99 @@ func GetDailyMetricsQuery() string {
 	}`
 }
 
+func GetCollectionDepositsQuery() string {
+	return `query GetCollectionDeposits($first: Int, $skip: Int, $where: Deposit_filter) {
+		deposits(first: $first, skip: $skip, where: $where) {
+			id
+			user {
+				id
+			}
+			collection {
+				id
+				contractAddress
+			}
+			vault {
+				id
+			}
+			amount
+			shares
+			timestamp
+			transactionHash
+		}
+	}`
+}
+
+func GetBorrowsQuery() string {
+	return `query GetBorrows($first: Int, $skip: Int, $where: Borrow_filter) {
+		borrows(first: $first, skip: $skip, where: $where) {
+			id
+			user {
+				id
+			}
+			collection {
+				id
+				contractAddress
+			}
+			vault {
+				id
+			}
+			amount
+			timestamp
+			transactionHash
+		}
+	}`
+}
+
+func GetSubsidyClaimsQuery() string {
+	return `query GetSubsidyClaims($first: Int, $skip: Int, $where: SubsidyClaim_filter) {
+		subsidyClaims(first: $first, skip: $skip, where: $where) {
+			id
+			user {
+				id
+			}
+			epoch {
+				id
+				epochNumber
+			}
+			collection {
+				id
+				contractAddress
+			}
+			amount
+			timestamp
+			transactionHash
+		}
+	}`
+}
+
+func GetEpochQuery() string {
+	return `query GetEpoch($id: ID!) {
+		epoch(id: $id) {
+			id
+			epochNumber
+			status
+			startTimestamp
+			endTimestamp
+			totalYieldAvailable
+			totalYieldDistributed
+			participantCount
+		}
+	}`
+}
+
+func GetUserBalanceQuery() string {
+	return `query GetUserBalance($id: ID!) {
+		account(id: $id) {
+			id
+			totalYieldEarned
+			totalSubsidiesReceived
+			totalBorrowVolume
+			totalNFTsOwned
+			vaultBalance
+		}
+	}`
+}
+
 type QueryBuilder struct {
 	query     string
 	variables map[string]interface{}

@@ -297,6 +297,7 @@ type Account struct {
 	TotalBorrowVolume            *big.Int                         `json:"totalBorrowVolume"`
 	TotalNFTsOwned               *big.Int                         `json:"totalNFTsOwned"`
 	TotalCollectionsParticipated *big.Int                         `json:"totalCollectionsParticipated"`
+	VaultBalance                 *big.Int                         `json:"vaultBalance"`
 	Markets                      []*AccountMarket                 `json:"markets"`
 	AccountSubsidies             []*AccountSubsidiesPerCollection `json:"accountSubsidies"`
 	RoleAssignments              []*AccountRoleAssignment         `json:"roleAssignments"`
@@ -449,6 +450,37 @@ type DailyMetrics struct {
 	Timestamp                 *big.Int `json:"timestamp"`
 }
 
+type Deposit struct {
+	ID              string            `json:"id"`
+	User            *Account          `json:"user"`
+	Collection      *Collection       `json:"collection"`
+	Vault           *CollectionsVault `json:"vault"`
+	Amount          *big.Int          `json:"amount"`
+	Shares          *big.Int          `json:"shares"`
+	Timestamp       *big.Int          `json:"timestamp"`
+	TransactionHash string            `json:"transactionHash"`
+}
+
+type Borrow struct {
+	ID              string            `json:"id"`
+	User            *Account          `json:"user"`
+	Collection      *Collection       `json:"collection"`
+	Vault           *CollectionsVault `json:"vault"`
+	Amount          *big.Int          `json:"amount"`
+	Timestamp       *big.Int          `json:"timestamp"`
+	TransactionHash string            `json:"transactionHash"`
+}
+
+type SubsidyClaim struct {
+	ID              string      `json:"id"`
+	User            *Account    `json:"user"`
+	Epoch           *Epoch      `json:"epoch"`
+	Collection      *Collection `json:"collection"`
+	Amount          *big.Int    `json:"amount"`
+	Timestamp       *big.Int    `json:"timestamp"`
+	TransactionHash string      `json:"transactionHash"`
+}
+
 type QueryResponse struct {
 	Data   interface{}    `json:"data"`
 	Errors []GraphQLError `json:"errors,omitempty"`
@@ -484,4 +516,16 @@ type SubsidyDistributionResponse struct {
 
 type MerkleDistributionResponse struct {
 	MerkleDistributions []*MerkleDistribution `json:"merkleDistributions"`
+}
+
+type DepositResponse struct {
+	Deposits []*Deposit `json:"deposits"`
+}
+
+type BorrowResponse struct {
+	Borrows []*Borrow `json:"borrows"`
+}
+
+type SubsidyClaimResponse struct {
+	SubsidyClaims []*SubsidyClaim `json:"subsidyClaims"`
 }
