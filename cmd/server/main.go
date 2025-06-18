@@ -19,6 +19,7 @@ import (
 	"go-server/internal/api/handlers"
 	eth "go-server/internal/platform/ethereum"
 	ws "go-server/internal/platform/websocket"
+	"go-server/internal/service/collection"
 	"go-server/internal/service/datacollector"
 	epochscheduler "go-server/internal/service/epoch"
 	"go-server/internal/service/subsidy"
@@ -44,6 +45,9 @@ func main() {
 	}
 	if cfg.RPCHTTPURL == "" {
 		logger.Fatal("RPC_HTTP_URL environment variable is required")
+	}
+	if cfg.SubgraphURL == "" {
+		logger.Fatal("SUBGRAPH_URL environment variable is required")
 	}
 
 	// Parse polling interval
@@ -80,6 +84,15 @@ func main() {
 		defer subsidyService.Close()
 	}
 
+	// Initialize Collection Service
+	collectionService, err := collection.NewService(cfg, logger)
+	if err != nil {
+		logger.Warn("Failed to initialize Collection Service. Continuing without it.", zap.Error(err))
+	} else {
+		logger.Info("Collection Service initialized successfully")
+		defer collectionService.Close()
+	}
+
 	// Test DataCollector functionality if vault addresses are provided
 	collectionsVaultAddressesStr := getEnvOrDefault("COLLECTIONS_VAULT_ADDRESSES", "")
 	if collectionsVaultAddressesStr != "" {
@@ -98,11 +111,12 @@ func main() {
 	// Initialize HTTP router and handlers
 	router := chi.NewRouter()
 	deps := handlers.Deps{
-		Cfg:            cfg,
-		Eth:            ethClients,
-		Hub:            hub,
-		SubsidyService: subsidyService,
-		Logger:         logger,
+		Cfg:               cfg,
+		Eth:               ethClients,
+		Hub:               hub,
+		SubsidyService:    subsidyService,
+		CollectionService: collectionService,
+		Logger:            logger,
 	}
 	handlers.Register(router, deps)
 
@@ -138,6 +152,14 @@ func main() {
 		logger.Error("HTTP server shutdown error", zap.Error(err))
 	} else {
 		logger.Info("HTTP server stopped")
+	}
+
+	// Cleanup services
+	if collectionService != nil {
+		collectionService.Close()
+	}
+	if subsidyService != nil {
+		subsidyService.Close()
 	}
 
 	// Give the scheduler and other services some time to cleanup based on context cancellation

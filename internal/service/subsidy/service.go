@@ -16,17 +16,18 @@ import (
 
 	config "go-server/configs"
 	"go-server/contracts"
-	gql "go-server/internal/platform/graphql"
+	"go-server/internal/gql"
+	"go-server/internal/platform/graphql"
 	"go-server/pkg/merkletree"
 )
 
-// Recipient represents an account eligible for subsidy
+// Recipient is an account eligible for subsidy.
 type Recipient struct {
 	Address common.Address
 	Amount  *big.Int
 }
 
-// Service manages the subsidy distribution process
+// Service manages the subsidy distribution process.
 type Service struct {
 	subgraphURL        string
 	subsidizerContract *bind.BoundContract
@@ -40,7 +41,6 @@ type Service struct {
 	chainID            *big.Int
 }
 
-// NewService creates a new Subsidy Service instance
 func NewService(cfg config.Config, logger *zap.Logger) (*Service, error) {
 	ethClient, err := ethclient.Dial(cfg.RPCHTTPURL)
 	if err != nil {
@@ -117,7 +117,7 @@ func (s *Service) gather(ctx context.Context, epoch uint64) ([]Recipient, error)
 			} `json:"accounts"`
 		}
 
-		err := gql.Query(ctx, s.subgraphURL, query, &result)
+		err := graphql.Query(ctx, s.subgraphURL, query, &result)
 		if err != nil {
 			return nil, fmt.Errorf("failed to query subgraph: %w", err)
 		}
@@ -325,4 +325,176 @@ func (s *Service) Close() {
 	if s.logger != nil {
 		s.logger.Sync()
 	}
+}
+
+func (s *Service) CalculateUserEligibility(ctx context.Context, userAddr, vaultAddr, collectionAddr common.Address) (*gql.UserEpochEligibility, error) {
+	query := gql.GetUserEpochEligibilityByUserAndEpochQuery()
+
+	currentEpochQuery := gql.GetCurrentEpochQuery()
+	var epochResult struct {
+		Epochs []*gql.Epoch `json:"epochs"`
+	}
+
+	err := graphql.Query(ctx, s.subgraphURL, currentEpochQuery, &epochResult)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get current epoch: %w", err)
+	}
+
+	if len(epochResult.Epochs) == 0 {
+		return nil, fmt.Errorf("no active epoch found")
+	}
+
+	currentEpoch := epochResult.Epochs[0]
+
+	client := graphql.NewClient(s.subgraphURL)
+	variables := map[string]interface{}{
+		"userId":  userAddr.Hex(),
+		"epochId": currentEpoch.ID,
+	}
+
+	var result gql.UserEpochEligibilityResponse
+	err = client.QueryWithVariables(ctx, query, variables, &result)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query user eligibility: %w", err)
+	}
+
+	for _, eligibility := range result.UserEpochEligibilities {
+		if eligibility.Collection != nil &&
+			eligibility.Collection.ID == collectionAddr.Hex() {
+			return eligibility, nil
+		}
+	}
+
+	return nil, fmt.Errorf("no eligibility found for user %s in collection %s", userAddr.Hex(), collectionAddr.Hex())
+}
+
+func (s *Service) GenerateMerkleProof(ctx context.Context, userAddr common.Address, amount *big.Int, recipients []Recipient) ([][32]byte, error) {
+	pairs := make([]merkletree.Pair, len(recipients))
+	for i, r := range recipients {
+		pairs[i] = merkletree.Pair{Account: r.Address, Amount: r.Amount}
+	}
+
+	_, proofs := merkletree.BuildPairs(pairs)
+
+	var addrKey [20]byte
+	copy(addrKey[:], userAddr.Bytes())
+
+	proofBytes, exists := proofs[addrKey]
+	if !exists {
+		return nil, fmt.Errorf("no proof found for user %s", userAddr.Hex())
+	}
+
+	var proof [][32]byte
+	for _, b := range proofBytes {
+		var tmp [32]byte
+		copy(tmp[:], b)
+		proof = append(proof, tmp)
+	}
+
+	return proof, nil
+}
+
+func (s *Service) ValidateClaimData(ctx context.Context, vaultAddr common.Address, claim contracts.IDebtSubsidizerClaimData) error {
+	s.logger.Info("Validating claim data for user",
+		zap.String("user", claim.Recipient.Hex()),
+		zap.String("vault", vaultAddr.Hex()),
+		zap.String("amount", claim.TotalEarned.String()))
+
+	return nil
+}
+
+func (s *Service) ProcessBatchClaims(ctx context.Context, vaultAddresses []common.Address, claims []contracts.IDebtSubsidizerClaimData) error {
+	if len(vaultAddresses) != len(claims) {
+		return fmt.Errorf("vault addresses and claims length mismatch")
+	}
+
+	batchSize := s.config.SubsidyBatchSize
+	for i := 0; i < len(claims); i += batchSize {
+		end := i + batchSize
+		if end > len(claims) {
+			end = len(claims)
+		}
+
+		batchVaults := vaultAddresses[i:end]
+		batchClaims := claims[i:end]
+
+		err := s.processClaimBatch(ctx, batchVaults, batchClaims)
+		if err != nil {
+			return fmt.Errorf("failed to process claim batch at index %d: %w", i, err)
+		}
+
+		s.logger.Info("Successfully processed claim batch",
+			zap.Int("start_index", i),
+			zap.Int("end_index", end))
+	}
+
+	return nil
+}
+
+func (s *Service) processClaimBatch(ctx context.Context, vaultAddresses []common.Address, claims []contracts.IDebtSubsidizerClaimData) error {
+	nonce, err := s.ethClient.PendingNonceAt(ctx, s.ownerAddress)
+	if err != nil {
+		return fmt.Errorf("failed to get nonce: %w", err)
+	}
+
+	gasTipCap := s.config.SubsidyPayoutGasTip
+	if gasTipCap.Cmp(big.NewInt(0)) == 0 {
+		suggestedGasTip, err := s.ethClient.SuggestGasTipCap(ctx)
+		if err != nil {
+			s.logger.Warn("Failed to suggest gas tip cap, using default 0", zap.Error(err))
+			gasTipCap = big.NewInt(0)
+		} else {
+			gasTipCap = suggestedGasTip
+		}
+	}
+
+	auth, err := bind.NewKeyedTransactorWithChainID(s.signer, s.chainID)
+	if err != nil {
+		return fmt.Errorf("failed to create transactor: %w", err)
+	}
+	auth.Nonce = big.NewInt(int64(nonce))
+	auth.Value = big.NewInt(0)
+	auth.GasLimit = uint64(0)
+	auth.GasTipCap = gasTipCap
+
+	tx, err := s.subsidizerContract.Transact(auth, "claimAllSubsidies", vaultAddresses, claims)
+	if err != nil {
+		return fmt.Errorf("failed to send claimAllSubsidies transaction: %w", err)
+	}
+
+	receipt, err := bind.WaitMined(ctx, s.ethClient, tx)
+	if err != nil {
+		return fmt.Errorf("failed to mine claimAllSubsidies transaction: %w", err)
+	}
+
+	if receipt.Status != types.ReceiptStatusSuccessful {
+		return fmt.Errorf("claimAllSubsidies transaction failed: %s", receipt.TxHash.Hex())
+	}
+
+	return nil
+}
+
+func (s *Service) GetClaimStatus(ctx context.Context, userAddr common.Address, epochID string) (*gql.SubsidyDistribution, error) {
+	query := gql.GetSubsidyDistributionsByEpochQuery()
+
+	variables := map[string]interface{}{
+		"epochId": epochID,
+		"first":   1000,
+		"skip":    0,
+	}
+
+	client := graphql.NewClient(s.subgraphURL)
+	var result gql.SubsidyDistributionResponse
+	err := client.QueryWithVariables(ctx, query, variables, &result)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query subsidy distributions: %w", err)
+	}
+
+	for _, distribution := range result.SubsidyDistributions {
+		if distribution.User != nil && distribution.User.ID == userAddr.Hex() {
+			return distribution, nil
+		}
+	}
+
+	return nil, fmt.Errorf("no claim found for user %s in epoch %s", userAddr.Hex(), epochID)
 }

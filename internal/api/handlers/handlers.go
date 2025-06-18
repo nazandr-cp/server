@@ -15,15 +15,17 @@ import (
 	"go-server/internal/gql"
 	eth "go-server/internal/platform/ethereum"
 	ws "go-server/internal/platform/websocket"
+	"go-server/internal/service/collection"
 	"go-server/internal/service/subsidy"
 )
 
 type Deps struct {
-	Cfg            config.Config
-	Eth            *eth.Clients
-	Hub            *ws.Hub
-	SubsidyService *subsidy.Service
-	Logger         *zap.Logger
+	Cfg               config.Config
+	Eth               *eth.Clients
+	Hub               *ws.Hub
+	SubsidyService    *subsidy.Service
+	CollectionService *collection.Service
+	Logger            *zap.Logger
 }
 
 // AdminAuth is a middleware to protect admin routes
@@ -61,6 +63,31 @@ func Register(r chi.Router, d Deps) {
 	r.Get("/healthz", healthz)
 	r.Get("/ws", d.Hub.ServeWS)
 	r.Get("/epochs/current", currentEpoch(d))
+
+	// API v1 routes
+	r.Route("/api/v1", func(apiRouter chi.Router) {
+		// Subsidy endpoints
+		apiRouter.Get("/epochs/{epochId}/eligibility/{userAddress}", GetEligibility(d))
+		apiRouter.Get("/epochs/{epochId}/merkle-proof/{userAddress}", GetMerkleProof(d))
+		apiRouter.Post("/claims/batch-verify", BatchVerifyClaims(d))
+		apiRouter.Get("/users/{address}/claim-status", GetUserClaimStatus(d))
+
+		// Analytics endpoints
+		apiRouter.Get("/system/metrics", GetSystemMetrics(d))
+		apiRouter.Get("/epochs/{epochId}/allocations", GetEpochAllocations(d))
+		apiRouter.Get("/vaults/{address}/performance", GetVaultPerformance(d))
+		apiRouter.Get("/analytics/daily/{date}", GetDailyAnalytics(d))
+
+		// Enhanced epoch endpoints
+		apiRouter.Get("/epochs/current", GetCurrentEpoch(d))
+		apiRouter.Get("/epochs/{epochId}/details", GetEpochDetails(d))
+		apiRouter.Get("/epochs/{epochId}/collections", GetEpochCollections(d))
+
+		// Collection endpoints
+		apiRouter.Get("/collections/{address}/participants", GetCollectionParticipants(d))
+		apiRouter.Get("/collections/{address}/metrics", GetCollectionMetrics(d))
+		apiRouter.Get("/collections/active", GetActiveCollections(d))
+	})
 
 	r.Route("/admin", func(adminRouter chi.Router) {
 		adminRouter.Use(AdminAuth(d.Cfg))

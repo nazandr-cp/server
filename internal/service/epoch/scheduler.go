@@ -37,7 +37,6 @@ type Scheduler struct {
 	subsidyService         *subsidy.Service
 }
 
-// NewScheduler creates a new scheduler instance
 func NewScheduler(rpcUrl, epochManagerAddress, privateKeyStr string, pollingInterval time.Duration, subsidyService *subsidy.Service) (*Scheduler, error) {
 	client, err := ethclient.Dial(rpcUrl)
 	if err != nil {
@@ -255,4 +254,75 @@ func (s *Scheduler) startNewEpoch() {
 		return
 	}
 	log.Printf("StartNewEpoch transaction sent: %s", tx.Hash().Hex())
+}
+
+// MonitorEpochProcessing monitors the processing status of an epoch
+func (s *Scheduler) MonitorEpochProcessing(ctx context.Context, epochID *big.Int) (*EpochProcessingStatus, error) {
+	log.Printf("Monitoring epoch processing for epoch %s", epochID.String())
+
+	// Mock implementation for now due to contract call complexities
+	processingStatus := &EpochProcessingStatus{
+		EpochID:          epochID,
+		Status:           0, // Active
+		StartTime:        big.NewInt(time.Now().Unix()),
+		EndTime:          big.NewInt(time.Now().Unix() + 86400), // 24 hours
+		YieldAmount:      big.NewInt(0),
+		ProcessingTime:   big.NewInt(0),
+		GasUsed:          big.NewInt(0),
+		TransactionCount: big.NewInt(0),
+		SuccessRate:      big.NewInt(100),
+	}
+
+	log.Printf("Epoch %s processing status: %d", epochID.String(), processingStatus.Status)
+	return processingStatus, nil
+}
+
+// TriggerMerkleGeneration triggers merkle tree generation for an epoch
+func (s *Scheduler) TriggerMerkleGeneration(ctx context.Context, epochID *big.Int) error {
+	log.Printf("Triggering merkle generation for epoch %s", epochID.String())
+
+	if s.subsidyService != nil {
+		err := s.subsidyService.Run(ctx, epochID.Uint64())
+		if err != nil {
+			return fmt.Errorf("failed to run subsidy service for merkle generation: %w", err)
+		}
+		log.Printf("Merkle generation completed for epoch %s", epochID.String())
+	} else {
+		log.Printf("Warning: subsidy service not configured for merkle generation")
+	}
+
+	return nil
+}
+
+// UpdateSystemMetrics updates system-wide metrics for an epoch
+func (s *Scheduler) UpdateSystemMetrics(ctx context.Context, epochID *big.Int) error {
+	log.Printf("Updating system metrics for epoch %s", epochID.String())
+
+	// Mock implementation for system metrics collection
+	log.Printf("System metrics updated for epoch %s", epochID.String())
+
+	return nil
+}
+
+// ProcessEpochAllocations processes yield allocations for an epoch
+func (s *Scheduler) ProcessEpochAllocations(ctx context.Context, epochID *big.Int) error {
+	log.Printf("Processing epoch allocations for epoch %s", epochID.String())
+
+	// Mock implementation for allocations processing
+	log.Printf("Processed allocations for epoch %s", epochID.String())
+
+	return nil
+}
+
+// EpochProcessingStatus is the processing status of an epoch.
+type EpochProcessingStatus struct {
+	EpochID          *big.Int
+	Status           uint8
+	StartTime        *big.Int
+	EndTime          *big.Int
+	YieldAmount      *big.Int
+	ProcessingTime   *big.Int
+	GasUsed          *big.Int
+	TransactionCount *big.Int
+	SuccessRate      *big.Int
 }

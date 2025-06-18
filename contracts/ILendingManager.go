@@ -26,7 +26,7 @@ var (
 
 // ILendingManagerMetaData contains all meta data concerning the ILendingManager contract.
 var ILendingManagerMetaData = bind.MetaData{
-	ABI: "[{\"type\":\"function\",\"name\":\"asset\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"contractIERC20\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"cToken\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"depositToLendingProtocol\",\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"success\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"redeemAllCTokens\",\"inputs\":[{\"name\":\"recipient\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"amountRedeemed\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"repayBorrowBehalf\",\"inputs\":[{\"name\":\"borrower\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"repayAmount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"totalAssets\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalPrincipalDeposited\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"withdrawFromLendingProtocol\",\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"success\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"DepositToProtocol\",\"inputs\":[{\"name\":\"caller\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"PrincipalReset\",\"inputs\":[{\"name\":\"oldValue\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"trigger\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"WithdrawFromProtocol\",\"inputs\":[{\"name\":\"caller\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"YieldTransferred\",\"inputs\":[{\"name\":\"recipient\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"YieldTransferredBatch\",\"inputs\":[{\"name\":\"recipient\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"totalAmount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"collections\",\"type\":\"address[]\",\"indexed\":false,\"internalType\":\"address[]\"},{\"name\":\"amounts\",\"type\":\"uint256[]\",\"indexed\":false,\"internalType\":\"uint256[]\"}],\"anonymous\":false},{\"type\":\"error\",\"name\":\"AddressZero\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"CannotRemoveLastAdmin\",\"inputs\":[{\"name\":\"role\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}]},{\"type\":\"error\",\"name\":\"InsufficientBalanceInProtocol\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"LM_CallerNotRewardsController\",\"inputs\":[{\"name\":\"caller\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"LM_CallerNotVault\",\"inputs\":[{\"name\":\"caller\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenMintFailed\",\"inputs\":[{\"name\":\"errorCode\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenMintFailedBytes\",\"inputs\":[{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenMintFailedReason\",\"inputs\":[{\"name\":\"reason\",\"type\":\"string\",\"internalType\":\"string\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRedeemFailed\",\"inputs\":[{\"name\":\"errorCode\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRedeemFailedBytes\",\"inputs\":[{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRedeemFailedReason\",\"inputs\":[{\"name\":\"reason\",\"type\":\"string\",\"internalType\":\"string\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRedeemUnderlyingFailed\",\"inputs\":[{\"name\":\"errorCode\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRedeemUnderlyingFailedBytes\",\"inputs\":[{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRedeemUnderlyingFailedReason\",\"inputs\":[{\"name\":\"reason\",\"type\":\"string\",\"internalType\":\"string\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRepayBorrowBehalfFailed\",\"inputs\":[{\"name\":\"errorCode\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRepayBorrowBehalfFailedBytes\",\"inputs\":[{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRepayBorrowBehalfFailedReason\",\"inputs\":[{\"name\":\"reason\",\"type\":\"string\",\"internalType\":\"string\"}]},{\"type\":\"error\",\"name\":\"LendingManager__BalanceCheckFailed\",\"inputs\":[{\"name\":\"reason\",\"type\":\"string\",\"internalType\":\"string\"},{\"name\":\"expected\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"actual\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}]",
+	ABI: "[{\"type\":\"function\",\"name\":\"addSupportedMarket\",\"inputs\":[{\"name\":\"market\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"asset\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"contractIERC20\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"cToken\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"depositToLendingProtocol\",\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"success\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"getGlobalCollateralFactor\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getLiquidationIncentive\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getSupportedMarkets\",\"inputs\":[],\"outputs\":[{\"name\":\"markets\",\"type\":\"address[]\",\"internalType\":\"address[]\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getTotalBorrowVolume\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getTotalLiquidationVolume\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getTotalMarketParticipants\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getTotalSupplyVolume\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"recordLiquidationVolume\",\"inputs\":[{\"name\":\"liquidationAmount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"redeemAllCTokens\",\"inputs\":[{\"name\":\"recipient\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"amountRedeemed\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"removeSupportedMarket\",\"inputs\":[{\"name\":\"market\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"repayBorrowBehalf\",\"inputs\":[{\"name\":\"borrower\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"repayAmount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"setGlobalCollateralFactor\",\"inputs\":[{\"name\":\"_globalCollateralFactor\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"setLiquidationIncentive\",\"inputs\":[{\"name\":\"_liquidationIncentive\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"totalAssets\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalPrincipalDeposited\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"updateMarketParticipants\",\"inputs\":[{\"name\":\"_totalMarketParticipants\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"withdrawFromLendingProtocol\",\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"success\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"BorrowVolumeUpdated\",\"inputs\":[{\"name\":\"totalVolume\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"incrementAmount\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"timestamp\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"DepositToProtocol\",\"inputs\":[{\"name\":\"caller\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"GlobalCollateralFactorUpdated\",\"inputs\":[{\"name\":\"newFactor\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"timestamp\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"LendingManagerRoleGranted\",\"inputs\":[{\"name\":\"role\",\"type\":\"bytes32\",\"indexed\":true,\"internalType\":\"bytes32\"},{\"name\":\"account\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"timestamp\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"LendingManagerRoleRevoked\",\"inputs\":[{\"name\":\"role\",\"type\":\"bytes32\",\"indexed\":true,\"internalType\":\"bytes32\"},{\"name\":\"account\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"timestamp\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"LiquidationIncentiveUpdated\",\"inputs\":[{\"name\":\"newIncentive\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"timestamp\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"LiquidationVolumeUpdated\",\"inputs\":[{\"name\":\"totalVolume\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"incrementAmount\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"timestamp\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"PrincipalReset\",\"inputs\":[{\"name\":\"oldValue\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"trigger\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"SupplyVolumeUpdated\",\"inputs\":[{\"name\":\"totalVolume\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"incrementAmount\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"timestamp\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"SupportedMarketAdded\",\"inputs\":[{\"name\":\"market\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"timestamp\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"SupportedMarketRemoved\",\"inputs\":[{\"name\":\"market\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"timestamp\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"WithdrawFromProtocol\",\"inputs\":[{\"name\":\"caller\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"YieldTransferred\",\"inputs\":[{\"name\":\"recipient\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"YieldTransferredBatch\",\"inputs\":[{\"name\":\"recipient\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"totalAmount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"collections\",\"type\":\"address[]\",\"indexed\":false,\"internalType\":\"address[]\"},{\"name\":\"amounts\",\"type\":\"uint256[]\",\"indexed\":false,\"internalType\":\"uint256[]\"}],\"anonymous\":false},{\"type\":\"error\",\"name\":\"AddressZero\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"CannotRemoveLastAdmin\",\"inputs\":[{\"name\":\"role\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}]},{\"type\":\"error\",\"name\":\"InsufficientBalanceInProtocol\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"LM_CallerNotRewardsController\",\"inputs\":[{\"name\":\"caller\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"LM_CallerNotVault\",\"inputs\":[{\"name\":\"caller\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenMintFailed\",\"inputs\":[{\"name\":\"errorCode\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenMintFailedBytes\",\"inputs\":[{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenMintFailedReason\",\"inputs\":[{\"name\":\"reason\",\"type\":\"string\",\"internalType\":\"string\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRedeemFailed\",\"inputs\":[{\"name\":\"errorCode\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRedeemFailedBytes\",\"inputs\":[{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRedeemFailedReason\",\"inputs\":[{\"name\":\"reason\",\"type\":\"string\",\"internalType\":\"string\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRedeemUnderlyingFailed\",\"inputs\":[{\"name\":\"errorCode\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRedeemUnderlyingFailedBytes\",\"inputs\":[{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRedeemUnderlyingFailedReason\",\"inputs\":[{\"name\":\"reason\",\"type\":\"string\",\"internalType\":\"string\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRepayBorrowBehalfFailed\",\"inputs\":[{\"name\":\"errorCode\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRepayBorrowBehalfFailedBytes\",\"inputs\":[{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"type\":\"error\",\"name\":\"LendingManagerCTokenRepayBorrowBehalfFailedReason\",\"inputs\":[{\"name\":\"reason\",\"type\":\"string\",\"internalType\":\"string\"}]},{\"type\":\"error\",\"name\":\"LendingManager__BalanceCheckFailed\",\"inputs\":[{\"name\":\"reason\",\"type\":\"string\",\"internalType\":\"string\"},{\"name\":\"expected\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"actual\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}]",
 	ID:  "ILendingManager",
 }
 
@@ -48,6 +48,18 @@ func NewILendingManager() *ILendingManager {
 // Use this to create the instance object passed to abigen v2 library functions Call, Transact, etc.
 func (c *ILendingManager) Instance(backend bind.ContractBackend, addr common.Address) *bind.BoundContract {
 	return bind.NewBoundContract(addr, c.abi, backend, backend, backend)
+}
+
+// PackAddSupportedMarket is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0x16a2d41f.
+//
+// Solidity: function addSupportedMarket(address market) returns()
+func (iLendingManager *ILendingManager) PackAddSupportedMarket(market common.Address) []byte {
+	enc, err := iLendingManager.abi.Pack("addSupportedMarket", market)
+	if err != nil {
+		panic(err)
+	}
+	return enc
 }
 
 // PackAsset is the Go binding used to pack the parameters required for calling
@@ -125,6 +137,193 @@ func (iLendingManager *ILendingManager) UnpackDepositToLendingProtocol(data []by
 	return out0, err
 }
 
+// PackGetGlobalCollateralFactor is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0x7216c451.
+//
+// Solidity: function getGlobalCollateralFactor() view returns(uint256)
+func (iLendingManager *ILendingManager) PackGetGlobalCollateralFactor() []byte {
+	enc, err := iLendingManager.abi.Pack("getGlobalCollateralFactor")
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// UnpackGetGlobalCollateralFactor is the Go binding that unpacks the parameters returned
+// from invoking the contract method with ID 0x7216c451.
+//
+// Solidity: function getGlobalCollateralFactor() view returns(uint256)
+func (iLendingManager *ILendingManager) UnpackGetGlobalCollateralFactor(data []byte) (*big.Int, error) {
+	out, err := iLendingManager.abi.Unpack("getGlobalCollateralFactor", data)
+	if err != nil {
+		return new(big.Int), err
+	}
+	out0 := abi.ConvertType(out[0], new(big.Int)).(*big.Int)
+	return out0, err
+}
+
+// PackGetLiquidationIncentive is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0xc29a1d58.
+//
+// Solidity: function getLiquidationIncentive() view returns(uint256)
+func (iLendingManager *ILendingManager) PackGetLiquidationIncentive() []byte {
+	enc, err := iLendingManager.abi.Pack("getLiquidationIncentive")
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// UnpackGetLiquidationIncentive is the Go binding that unpacks the parameters returned
+// from invoking the contract method with ID 0xc29a1d58.
+//
+// Solidity: function getLiquidationIncentive() view returns(uint256)
+func (iLendingManager *ILendingManager) UnpackGetLiquidationIncentive(data []byte) (*big.Int, error) {
+	out, err := iLendingManager.abi.Unpack("getLiquidationIncentive", data)
+	if err != nil {
+		return new(big.Int), err
+	}
+	out0 := abi.ConvertType(out[0], new(big.Int)).(*big.Int)
+	return out0, err
+}
+
+// PackGetSupportedMarkets is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0xf9476290.
+//
+// Solidity: function getSupportedMarkets() view returns(address[] markets)
+func (iLendingManager *ILendingManager) PackGetSupportedMarkets() []byte {
+	enc, err := iLendingManager.abi.Pack("getSupportedMarkets")
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// UnpackGetSupportedMarkets is the Go binding that unpacks the parameters returned
+// from invoking the contract method with ID 0xf9476290.
+//
+// Solidity: function getSupportedMarkets() view returns(address[] markets)
+func (iLendingManager *ILendingManager) UnpackGetSupportedMarkets(data []byte) ([]common.Address, error) {
+	out, err := iLendingManager.abi.Unpack("getSupportedMarkets", data)
+	if err != nil {
+		return *new([]common.Address), err
+	}
+	out0 := *abi.ConvertType(out[0], new([]common.Address)).(*[]common.Address)
+	return out0, err
+}
+
+// PackGetTotalBorrowVolume is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0x1d6d529c.
+//
+// Solidity: function getTotalBorrowVolume() view returns(uint256)
+func (iLendingManager *ILendingManager) PackGetTotalBorrowVolume() []byte {
+	enc, err := iLendingManager.abi.Pack("getTotalBorrowVolume")
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// UnpackGetTotalBorrowVolume is the Go binding that unpacks the parameters returned
+// from invoking the contract method with ID 0x1d6d529c.
+//
+// Solidity: function getTotalBorrowVolume() view returns(uint256)
+func (iLendingManager *ILendingManager) UnpackGetTotalBorrowVolume(data []byte) (*big.Int, error) {
+	out, err := iLendingManager.abi.Unpack("getTotalBorrowVolume", data)
+	if err != nil {
+		return new(big.Int), err
+	}
+	out0 := abi.ConvertType(out[0], new(big.Int)).(*big.Int)
+	return out0, err
+}
+
+// PackGetTotalLiquidationVolume is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0x1aeab45b.
+//
+// Solidity: function getTotalLiquidationVolume() view returns(uint256)
+func (iLendingManager *ILendingManager) PackGetTotalLiquidationVolume() []byte {
+	enc, err := iLendingManager.abi.Pack("getTotalLiquidationVolume")
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// UnpackGetTotalLiquidationVolume is the Go binding that unpacks the parameters returned
+// from invoking the contract method with ID 0x1aeab45b.
+//
+// Solidity: function getTotalLiquidationVolume() view returns(uint256)
+func (iLendingManager *ILendingManager) UnpackGetTotalLiquidationVolume(data []byte) (*big.Int, error) {
+	out, err := iLendingManager.abi.Unpack("getTotalLiquidationVolume", data)
+	if err != nil {
+		return new(big.Int), err
+	}
+	out0 := abi.ConvertType(out[0], new(big.Int)).(*big.Int)
+	return out0, err
+}
+
+// PackGetTotalMarketParticipants is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0x948a092d.
+//
+// Solidity: function getTotalMarketParticipants() view returns(uint256)
+func (iLendingManager *ILendingManager) PackGetTotalMarketParticipants() []byte {
+	enc, err := iLendingManager.abi.Pack("getTotalMarketParticipants")
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// UnpackGetTotalMarketParticipants is the Go binding that unpacks the parameters returned
+// from invoking the contract method with ID 0x948a092d.
+//
+// Solidity: function getTotalMarketParticipants() view returns(uint256)
+func (iLendingManager *ILendingManager) UnpackGetTotalMarketParticipants(data []byte) (*big.Int, error) {
+	out, err := iLendingManager.abi.Unpack("getTotalMarketParticipants", data)
+	if err != nil {
+		return new(big.Int), err
+	}
+	out0 := abi.ConvertType(out[0], new(big.Int)).(*big.Int)
+	return out0, err
+}
+
+// PackGetTotalSupplyVolume is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0x919a2e5d.
+//
+// Solidity: function getTotalSupplyVolume() view returns(uint256)
+func (iLendingManager *ILendingManager) PackGetTotalSupplyVolume() []byte {
+	enc, err := iLendingManager.abi.Pack("getTotalSupplyVolume")
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// UnpackGetTotalSupplyVolume is the Go binding that unpacks the parameters returned
+// from invoking the contract method with ID 0x919a2e5d.
+//
+// Solidity: function getTotalSupplyVolume() view returns(uint256)
+func (iLendingManager *ILendingManager) UnpackGetTotalSupplyVolume(data []byte) (*big.Int, error) {
+	out, err := iLendingManager.abi.Unpack("getTotalSupplyVolume", data)
+	if err != nil {
+		return new(big.Int), err
+	}
+	out0 := abi.ConvertType(out[0], new(big.Int)).(*big.Int)
+	return out0, err
+}
+
+// PackRecordLiquidationVolume is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0xe372c8c4.
+//
+// Solidity: function recordLiquidationVolume(uint256 liquidationAmount) returns()
+func (iLendingManager *ILendingManager) PackRecordLiquidationVolume(liquidationAmount *big.Int) []byte {
+	enc, err := iLendingManager.abi.Pack("recordLiquidationVolume", liquidationAmount)
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
 // PackRedeemAllCTokens is the Go binding used to pack the parameters required for calling
 // the contract method with ID 0x5eb8fa6f.
 //
@@ -150,6 +349,18 @@ func (iLendingManager *ILendingManager) UnpackRedeemAllCTokens(data []byte) (*bi
 	return out0, err
 }
 
+// PackRemoveSupportedMarket is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0xd0652320.
+//
+// Solidity: function removeSupportedMarket(address market) returns()
+func (iLendingManager *ILendingManager) PackRemoveSupportedMarket(market common.Address) []byte {
+	enc, err := iLendingManager.abi.Pack("removeSupportedMarket", market)
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
 // PackRepayBorrowBehalf is the Go binding used to pack the parameters required for calling
 // the contract method with ID 0x2608f818.
 //
@@ -173,6 +384,30 @@ func (iLendingManager *ILendingManager) UnpackRepayBorrowBehalf(data []byte) (*b
 	}
 	out0 := abi.ConvertType(out[0], new(big.Int)).(*big.Int)
 	return out0, err
+}
+
+// PackSetGlobalCollateralFactor is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0xfb603d2d.
+//
+// Solidity: function setGlobalCollateralFactor(uint256 _globalCollateralFactor) returns()
+func (iLendingManager *ILendingManager) PackSetGlobalCollateralFactor(globalCollateralFactor *big.Int) []byte {
+	enc, err := iLendingManager.abi.Pack("setGlobalCollateralFactor", globalCollateralFactor)
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// PackSetLiquidationIncentive is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0xa8431081.
+//
+// Solidity: function setLiquidationIncentive(uint256 _liquidationIncentive) returns()
+func (iLendingManager *ILendingManager) PackSetLiquidationIncentive(liquidationIncentive *big.Int) []byte {
+	enc, err := iLendingManager.abi.Pack("setLiquidationIncentive", liquidationIncentive)
+	if err != nil {
+		panic(err)
+	}
+	return enc
 }
 
 // PackTotalAssets is the Go binding used to pack the parameters required for calling
@@ -225,6 +460,18 @@ func (iLendingManager *ILendingManager) UnpackTotalPrincipalDeposited(data []byt
 	return out0, err
 }
 
+// PackUpdateMarketParticipants is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0x4cf42a78.
+//
+// Solidity: function updateMarketParticipants(uint256 _totalMarketParticipants) returns()
+func (iLendingManager *ILendingManager) PackUpdateMarketParticipants(totalMarketParticipants *big.Int) []byte {
+	enc, err := iLendingManager.abi.Pack("updateMarketParticipants", totalMarketParticipants)
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
 // PackWithdrawFromLendingProtocol is the Go binding used to pack the parameters required for calling
 // the contract method with ID 0xd0942d2e.
 //
@@ -248,6 +495,49 @@ func (iLendingManager *ILendingManager) UnpackWithdrawFromLendingProtocol(data [
 	}
 	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
 	return out0, err
+}
+
+// ILendingManagerBorrowVolumeUpdated represents a BorrowVolumeUpdated event raised by the ILendingManager contract.
+type ILendingManagerBorrowVolumeUpdated struct {
+	TotalVolume     *big.Int
+	IncrementAmount *big.Int
+	Timestamp       *big.Int
+	Raw             *types.Log // Blockchain specific contextual infos
+}
+
+const ILendingManagerBorrowVolumeUpdatedEventName = "BorrowVolumeUpdated"
+
+// ContractEventName returns the user-defined event name.
+func (ILendingManagerBorrowVolumeUpdated) ContractEventName() string {
+	return ILendingManagerBorrowVolumeUpdatedEventName
+}
+
+// UnpackBorrowVolumeUpdatedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event BorrowVolumeUpdated(uint256 indexed totalVolume, uint256 indexed incrementAmount, uint256 indexed timestamp)
+func (iLendingManager *ILendingManager) UnpackBorrowVolumeUpdatedEvent(log *types.Log) (*ILendingManagerBorrowVolumeUpdated, error) {
+	event := "BorrowVolumeUpdated"
+	if log.Topics[0] != iLendingManager.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(ILendingManagerBorrowVolumeUpdated)
+	if len(log.Data) > 0 {
+		if err := iLendingManager.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iLendingManager.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
 }
 
 // ILendingManagerDepositToProtocol represents a DepositToProtocol event raised by the ILendingManager contract.
@@ -292,6 +582,221 @@ func (iLendingManager *ILendingManager) UnpackDepositToProtocolEvent(log *types.
 	return out, nil
 }
 
+// ILendingManagerGlobalCollateralFactorUpdated represents a GlobalCollateralFactorUpdated event raised by the ILendingManager contract.
+type ILendingManagerGlobalCollateralFactorUpdated struct {
+	NewFactor *big.Int
+	Timestamp *big.Int
+	Raw       *types.Log // Blockchain specific contextual infos
+}
+
+const ILendingManagerGlobalCollateralFactorUpdatedEventName = "GlobalCollateralFactorUpdated"
+
+// ContractEventName returns the user-defined event name.
+func (ILendingManagerGlobalCollateralFactorUpdated) ContractEventName() string {
+	return ILendingManagerGlobalCollateralFactorUpdatedEventName
+}
+
+// UnpackGlobalCollateralFactorUpdatedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event GlobalCollateralFactorUpdated(uint256 indexed newFactor, uint256 indexed timestamp)
+func (iLendingManager *ILendingManager) UnpackGlobalCollateralFactorUpdatedEvent(log *types.Log) (*ILendingManagerGlobalCollateralFactorUpdated, error) {
+	event := "GlobalCollateralFactorUpdated"
+	if log.Topics[0] != iLendingManager.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(ILendingManagerGlobalCollateralFactorUpdated)
+	if len(log.Data) > 0 {
+		if err := iLendingManager.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iLendingManager.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
+}
+
+// ILendingManagerLendingManagerRoleGranted represents a LendingManagerRoleGranted event raised by the ILendingManager contract.
+type ILendingManagerLendingManagerRoleGranted struct {
+	Role      [32]byte
+	Account   common.Address
+	Sender    common.Address
+	Timestamp *big.Int
+	Raw       *types.Log // Blockchain specific contextual infos
+}
+
+const ILendingManagerLendingManagerRoleGrantedEventName = "LendingManagerRoleGranted"
+
+// ContractEventName returns the user-defined event name.
+func (ILendingManagerLendingManagerRoleGranted) ContractEventName() string {
+	return ILendingManagerLendingManagerRoleGrantedEventName
+}
+
+// UnpackLendingManagerRoleGrantedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event LendingManagerRoleGranted(bytes32 indexed role, address indexed account, address sender, uint256 timestamp)
+func (iLendingManager *ILendingManager) UnpackLendingManagerRoleGrantedEvent(log *types.Log) (*ILendingManagerLendingManagerRoleGranted, error) {
+	event := "LendingManagerRoleGranted"
+	if log.Topics[0] != iLendingManager.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(ILendingManagerLendingManagerRoleGranted)
+	if len(log.Data) > 0 {
+		if err := iLendingManager.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iLendingManager.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
+}
+
+// ILendingManagerLendingManagerRoleRevoked represents a LendingManagerRoleRevoked event raised by the ILendingManager contract.
+type ILendingManagerLendingManagerRoleRevoked struct {
+	Role      [32]byte
+	Account   common.Address
+	Sender    common.Address
+	Timestamp *big.Int
+	Raw       *types.Log // Blockchain specific contextual infos
+}
+
+const ILendingManagerLendingManagerRoleRevokedEventName = "LendingManagerRoleRevoked"
+
+// ContractEventName returns the user-defined event name.
+func (ILendingManagerLendingManagerRoleRevoked) ContractEventName() string {
+	return ILendingManagerLendingManagerRoleRevokedEventName
+}
+
+// UnpackLendingManagerRoleRevokedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event LendingManagerRoleRevoked(bytes32 indexed role, address indexed account, address sender, uint256 timestamp)
+func (iLendingManager *ILendingManager) UnpackLendingManagerRoleRevokedEvent(log *types.Log) (*ILendingManagerLendingManagerRoleRevoked, error) {
+	event := "LendingManagerRoleRevoked"
+	if log.Topics[0] != iLendingManager.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(ILendingManagerLendingManagerRoleRevoked)
+	if len(log.Data) > 0 {
+		if err := iLendingManager.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iLendingManager.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
+}
+
+// ILendingManagerLiquidationIncentiveUpdated represents a LiquidationIncentiveUpdated event raised by the ILendingManager contract.
+type ILendingManagerLiquidationIncentiveUpdated struct {
+	NewIncentive *big.Int
+	Timestamp    *big.Int
+	Raw          *types.Log // Blockchain specific contextual infos
+}
+
+const ILendingManagerLiquidationIncentiveUpdatedEventName = "LiquidationIncentiveUpdated"
+
+// ContractEventName returns the user-defined event name.
+func (ILendingManagerLiquidationIncentiveUpdated) ContractEventName() string {
+	return ILendingManagerLiquidationIncentiveUpdatedEventName
+}
+
+// UnpackLiquidationIncentiveUpdatedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event LiquidationIncentiveUpdated(uint256 indexed newIncentive, uint256 indexed timestamp)
+func (iLendingManager *ILendingManager) UnpackLiquidationIncentiveUpdatedEvent(log *types.Log) (*ILendingManagerLiquidationIncentiveUpdated, error) {
+	event := "LiquidationIncentiveUpdated"
+	if log.Topics[0] != iLendingManager.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(ILendingManagerLiquidationIncentiveUpdated)
+	if len(log.Data) > 0 {
+		if err := iLendingManager.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iLendingManager.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
+}
+
+// ILendingManagerLiquidationVolumeUpdated represents a LiquidationVolumeUpdated event raised by the ILendingManager contract.
+type ILendingManagerLiquidationVolumeUpdated struct {
+	TotalVolume     *big.Int
+	IncrementAmount *big.Int
+	Timestamp       *big.Int
+	Raw             *types.Log // Blockchain specific contextual infos
+}
+
+const ILendingManagerLiquidationVolumeUpdatedEventName = "LiquidationVolumeUpdated"
+
+// ContractEventName returns the user-defined event name.
+func (ILendingManagerLiquidationVolumeUpdated) ContractEventName() string {
+	return ILendingManagerLiquidationVolumeUpdatedEventName
+}
+
+// UnpackLiquidationVolumeUpdatedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event LiquidationVolumeUpdated(uint256 indexed totalVolume, uint256 indexed incrementAmount, uint256 indexed timestamp)
+func (iLendingManager *ILendingManager) UnpackLiquidationVolumeUpdatedEvent(log *types.Log) (*ILendingManagerLiquidationVolumeUpdated, error) {
+	event := "LiquidationVolumeUpdated"
+	if log.Topics[0] != iLendingManager.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(ILendingManagerLiquidationVolumeUpdated)
+	if len(log.Data) > 0 {
+		if err := iLendingManager.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iLendingManager.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
+}
+
 // ILendingManagerPrincipalReset represents a PrincipalReset event raised by the ILendingManager contract.
 type ILendingManagerPrincipalReset struct {
 	OldValue *big.Int
@@ -316,6 +821,133 @@ func (iLendingManager *ILendingManager) UnpackPrincipalResetEvent(log *types.Log
 		return nil, errors.New("event signature mismatch")
 	}
 	out := new(ILendingManagerPrincipalReset)
+	if len(log.Data) > 0 {
+		if err := iLendingManager.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iLendingManager.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
+}
+
+// ILendingManagerSupplyVolumeUpdated represents a SupplyVolumeUpdated event raised by the ILendingManager contract.
+type ILendingManagerSupplyVolumeUpdated struct {
+	TotalVolume     *big.Int
+	IncrementAmount *big.Int
+	Timestamp       *big.Int
+	Raw             *types.Log // Blockchain specific contextual infos
+}
+
+const ILendingManagerSupplyVolumeUpdatedEventName = "SupplyVolumeUpdated"
+
+// ContractEventName returns the user-defined event name.
+func (ILendingManagerSupplyVolumeUpdated) ContractEventName() string {
+	return ILendingManagerSupplyVolumeUpdatedEventName
+}
+
+// UnpackSupplyVolumeUpdatedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event SupplyVolumeUpdated(uint256 indexed totalVolume, uint256 indexed incrementAmount, uint256 indexed timestamp)
+func (iLendingManager *ILendingManager) UnpackSupplyVolumeUpdatedEvent(log *types.Log) (*ILendingManagerSupplyVolumeUpdated, error) {
+	event := "SupplyVolumeUpdated"
+	if log.Topics[0] != iLendingManager.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(ILendingManagerSupplyVolumeUpdated)
+	if len(log.Data) > 0 {
+		if err := iLendingManager.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iLendingManager.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
+}
+
+// ILendingManagerSupportedMarketAdded represents a SupportedMarketAdded event raised by the ILendingManager contract.
+type ILendingManagerSupportedMarketAdded struct {
+	Market    common.Address
+	Timestamp *big.Int
+	Raw       *types.Log // Blockchain specific contextual infos
+}
+
+const ILendingManagerSupportedMarketAddedEventName = "SupportedMarketAdded"
+
+// ContractEventName returns the user-defined event name.
+func (ILendingManagerSupportedMarketAdded) ContractEventName() string {
+	return ILendingManagerSupportedMarketAddedEventName
+}
+
+// UnpackSupportedMarketAddedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event SupportedMarketAdded(address indexed market, uint256 indexed timestamp)
+func (iLendingManager *ILendingManager) UnpackSupportedMarketAddedEvent(log *types.Log) (*ILendingManagerSupportedMarketAdded, error) {
+	event := "SupportedMarketAdded"
+	if log.Topics[0] != iLendingManager.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(ILendingManagerSupportedMarketAdded)
+	if len(log.Data) > 0 {
+		if err := iLendingManager.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iLendingManager.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
+}
+
+// ILendingManagerSupportedMarketRemoved represents a SupportedMarketRemoved event raised by the ILendingManager contract.
+type ILendingManagerSupportedMarketRemoved struct {
+	Market    common.Address
+	Timestamp *big.Int
+	Raw       *types.Log // Blockchain specific contextual infos
+}
+
+const ILendingManagerSupportedMarketRemovedEventName = "SupportedMarketRemoved"
+
+// ContractEventName returns the user-defined event name.
+func (ILendingManagerSupportedMarketRemoved) ContractEventName() string {
+	return ILendingManagerSupportedMarketRemovedEventName
+}
+
+// UnpackSupportedMarketRemovedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event SupportedMarketRemoved(address indexed market, uint256 indexed timestamp)
+func (iLendingManager *ILendingManager) UnpackSupportedMarketRemovedEvent(log *types.Log) (*ILendingManagerSupportedMarketRemoved, error) {
+	event := "SupportedMarketRemoved"
+	if log.Topics[0] != iLendingManager.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(ILendingManagerSupportedMarketRemoved)
 	if len(log.Data) > 0 {
 		if err := iLendingManager.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
 			return nil, err

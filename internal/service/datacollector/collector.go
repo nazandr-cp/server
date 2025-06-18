@@ -12,44 +12,40 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-// EpochYieldData represents yield data for a specific epoch
+// EpochYieldData is yield data for a specific epoch.
 type EpochYieldData struct {
 	EpochID             *big.Int
 	TotalYieldAvailable *big.Int
-	VaultYields         map[common.Address]*big.Int // Vault address -> yield allocated by this vault
+	VaultYields         map[common.Address]*big.Int
 }
 
-// VaultAssetInfo represents information about a vault and its underlying asset
+// VaultAssetInfo contains information about a vault and its underlying asset.
 type VaultAssetInfo struct {
 	VaultAddress common.Address
 	AssetAddress common.Address
 }
 
-// AggregatedEpochData represents comprehensive data collected for an epoch
+// AggregatedEpochData is comprehensive data collected for an epoch.
 type AggregatedEpochData struct {
 	EpochID                    *big.Int
 	StartTime                  *big.Int
 	EndTime                    *big.Int
-	Status                     uint8 // From EpochManager.EpochStatus
+	Status                     uint8
 	TotalYieldAvailableInEpoch *big.Int
-	// Mapping of vault address to the amount of yield it has allocated for this epoch
-	YieldPerVault map[string]*big.Int // string for common.Address.Hex() as map key
-	// Information about each vault, like its underlying asset
-	VaultsInfo map[string]VaultAssetInfo // Vault address (hex) -> asset info
+	YieldPerVault              map[string]*big.Int
+	VaultsInfo                 map[string]VaultAssetInfo
 }
 
-// DataCollector aggregates data required for subsidy calculations
+// DataCollector aggregates data required for subsidy calculations.
 type DataCollector struct {
 	ethClient              *ethclient.Client
-	epochManager           *bind.BoundContract                    // Changed to *bind.BoundContract
-	collectionsVaults      map[common.Address]*bind.BoundContract // Changed to *bind.BoundContract
+	epochManager           *bind.BoundContract
+	collectionsVaults      map[common.Address]*bind.BoundContract
 	rpcUrl                 string
 	epochManagerAddressStr string
 }
 
-// NewDataCollector creates a new DataCollector instance
 func NewDataCollector(rpcUrl string, epochManagerAddress string, collectionsVaultAddresses []string) (*DataCollector, error) {
-	// Initialize Ethereum client
 	client, err := ethclient.Dial(rpcUrl)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to Ethereum client: %w", err)
@@ -84,7 +80,6 @@ func NewDataCollector(rpcUrl string, epochManagerAddress string, collectionsVaul
 	}, nil
 }
 
-// CollectDataForEpoch collects all relevant data for a given epoch
 func (d *DataCollector) CollectDataForEpoch(epochID *big.Int) (*AggregatedEpochData, error) {
 	log.Printf("Collecting data for epoch %s", epochID.String())
 
@@ -213,9 +208,100 @@ func (d *DataCollector) CollectDataForEpoch(epochID *big.Int) (*AggregatedEpochD
 	return aggregatedData, nil
 }
 
-// Close closes the Ethereum client connection
+// Close closes the Ethereum client connection.
 func (d *DataCollector) Close() {
 	if d.ethClient != nil {
 		d.ethClient.Close()
 	}
+}
+
+func (d *DataCollector) CollectCollectionData(epochID *big.Int) (map[string]*CollectionData, error) {
+	log.Printf("Collecting collection data for epoch %s", epochID.String())
+
+	collectionData := make(map[string]*CollectionData)
+
+	// For each vault, collect collection participation data
+	for vaultAddr := range d.collectionsVaults {
+		vaultHex := vaultAddr.Hex()
+
+		// Mock collection data - in reality would query subgraph or contracts
+		collectionData[vaultHex] = &CollectionData{
+			VaultAddress:        vaultAddr,
+			TotalParticipants:   big.NewInt(0),
+			TotalNFTsDeposited:  big.NewInt(0),
+			TotalYieldGenerated: big.NewInt(0),
+			ActiveCollections:   []common.Address{},
+		}
+	}
+
+	log.Printf("Collected collection data for %d vaults", len(collectionData))
+	return collectionData, nil
+}
+
+func (d *DataCollector) CollectUserEligibilityData(epochID *big.Int) (map[string]*UserEligibilityData, error) {
+	log.Printf("Collecting user eligibility data for epoch %s", epochID.String())
+
+	eligibilityData := make(map[string]*UserEligibilityData)
+
+	// Mock implementation - would query subgraph for actual user eligibility data
+	log.Printf("Collected user eligibility data for epoch %s", epochID.String())
+
+	return eligibilityData, nil
+}
+
+func (d *DataCollector) CollectSystemMetrics(epochID *big.Int) (*SystemMetrics, error) {
+	log.Printf("Collecting system metrics for epoch %s", epochID.String())
+
+	metrics := &SystemMetrics{
+		EpochID:                   epochID,
+		TotalValueLocked:          big.NewInt(0),
+		TotalYieldDistributed:     big.NewInt(0),
+		TotalSubsidiesDistributed: big.NewInt(0),
+		TotalActiveUsers:          big.NewInt(0),
+		TotalTransactions:         big.NewInt(0),
+		SystemUtilizationRate:     big.NewInt(0),
+		AverageAPY:                big.NewInt(0),
+	}
+
+	// Aggregate data from all vaults
+	for vaultAddr := range d.collectionsVaults {
+		log.Printf("Processing metrics for vault %s", vaultAddr.Hex())
+		// In reality, would query contracts and subgraph for actual metrics
+	}
+
+	log.Printf("Collected system metrics for epoch %s", epochID.String())
+	return metrics, nil
+}
+
+// CollectionData is data for collections in a vault.
+type CollectionData struct {
+	VaultAddress        common.Address
+	TotalParticipants   *big.Int
+	TotalNFTsDeposited  *big.Int
+	TotalYieldGenerated *big.Int
+	ActiveCollections   []common.Address
+}
+
+// UserEligibilityData is user eligibility information.
+type UserEligibilityData struct {
+	UserAddress       common.Address
+	CollectionAddress common.Address
+	VaultAddress      common.Address
+	NFTBalance        *big.Int
+	BorrowBalance     *big.Int
+	HoldingDuration   *big.Int
+	IsEligible        bool
+	SubsidyAmount     *big.Int
+}
+
+// SystemMetrics is system-wide metrics.
+type SystemMetrics struct {
+	EpochID                   *big.Int
+	TotalValueLocked          *big.Int
+	TotalYieldDistributed     *big.Int
+	TotalSubsidiesDistributed *big.Int
+	TotalActiveUsers          *big.Int
+	TotalTransactions         *big.Int
+	SystemUtilizationRate     *big.Int
+	AverageAPY                *big.Int
 }

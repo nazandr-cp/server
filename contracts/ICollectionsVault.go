@@ -26,7 +26,7 @@ var (
 
 // ICollectionsVaultMetaData contains all meta data concerning the ICollectionsVault contract.
 var ICollectionsVaultMetaData = bind.MetaData{
-	ABI: "[{\"type\":\"function\",\"name\":\"ADMIN_ROLE\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"DEBT_SUBSIDIZER_ROLE\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"allocateEpochYield\",\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"allocateYieldToEpoch\",\"inputs\":[{\"name\":\"epochId\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"allowance\",\"inputs\":[{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"spender\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"applyCollectionYieldForEpoch\",\"inputs\":[{\"name\":\"collection\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"epochId\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"approve\",\"inputs\":[{\"name\":\"spender\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"asset\",\"inputs\":[],\"outputs\":[{\"name\":\"assetTokenAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"balanceOf\",\"inputs\":[{\"name\":\"account\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"collectionTotalAssetsDeposited\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"convertToAssets\",\"inputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"convertToShares\",\"inputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"decimals\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint8\",\"internalType\":\"uint8\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"deposit\",\"inputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"depositForCollection\",\"inputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"epochManager\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"contractIEpochManager\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getCurrentEpochYield\",\"inputs\":[{\"name\":\"includeNonShared\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"outputs\":[{\"name\":\"availableYield\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getEpochYieldAllocated\",\"inputs\":[{\"name\":\"epochId\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"lendingManager\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"contractILendingManager\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"maxDeposit\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"maxAssets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"maxMint\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"maxShares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"maxRedeem\",\"inputs\":[{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"maxShares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"maxWithdraw\",\"inputs\":[{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"maxAssets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"mint\",\"inputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"mintForCollection\",\"inputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"name\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"string\",\"internalType\":\"string\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"previewDeposit\",\"inputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"previewMint\",\"inputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"previewRedeem\",\"inputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"previewWithdraw\",\"inputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"redeem\",\"inputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"redeemForCollection\",\"inputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"repayBorrowBehalf\",\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"borrower\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"repayBorrowBehalfBatch\",\"inputs\":[{\"name\":\"amounts\",\"type\":\"uint256[]\",\"internalType\":\"uint256[]\"},{\"name\":\"borrowers\",\"type\":\"address[]\",\"internalType\":\"address[]\"},{\"name\":\"totalAmount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"resetEpochCollectionYieldFlags\",\"inputs\":[{\"name\":\"epochId\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"collections\",\"type\":\"address[]\",\"internalType\":\"address[]\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"setDebtSubsidizer\",\"inputs\":[{\"name\":\"_debtSubsidizerAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"setLendingManager\",\"inputs\":[{\"name\":\"_lendingManagerAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"symbol\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"string\",\"internalType\":\"string\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalAssets\",\"inputs\":[],\"outputs\":[{\"name\":\"totalManagedAssets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalAssetsDepositedAllCollections\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalSupply\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"transfer\",\"inputs\":[{\"name\":\"to\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"transferForCollection\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"to\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"transferFrom\",\"inputs\":[{\"name\":\"from\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"to\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"withdraw\",\"inputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"withdrawForCollection\",\"inputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"Approval\",\"inputs\":[{\"name\":\"owner\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"spender\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionDeposit\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"caller\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"receiver\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"assets\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"shares\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"cTokenAmount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionTransfer\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"from\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"to\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"assets\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionWithdraw\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"caller\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"receiver\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"assets\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"shares\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"cTokenAmount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionYieldAccrued\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"yieldAccrued\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"newTotalDeposits\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"globalIndex\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"previousCollectionIndex\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionYieldAppliedForEpoch\",\"inputs\":[{\"name\":\"epochId\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"collection\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"yieldSharePercentage\",\"type\":\"uint16\",\"indexed\":false,\"internalType\":\"uint16\"},{\"name\":\"yieldAdded\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"newTotalDeposits\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionYieldIndexed\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"epochId\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"assets\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"shares\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"cTokenAmount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Deposit\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"owner\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"assets\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"shares\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"LendingManagerChanged\",\"inputs\":[{\"name\":\"oldLendingManager\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"newLendingManager\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"changedBy\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Transfer\",\"inputs\":[{\"name\":\"from\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"to\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"VaultYieldAllocatedToEpoch\",\"inputs\":[{\"name\":\"epochId\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"amount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Withdraw\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"receiver\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"owner\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"assets\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"shares\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"YieldBatchRepaid\",\"inputs\":[{\"name\":\"totalAmount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"recipient\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"error\",\"name\":\"AddressZero\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"CollectionInsufficientBalance\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"requested\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"available\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"type\":\"error\",\"name\":\"CollectionNotRegistered\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"ExcessiveYieldAmount\",\"inputs\":[{\"name\":\"collection\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"requested\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"maxAllowed\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"type\":\"error\",\"name\":\"FunctionDisabledUse\",\"inputs\":[{\"name\":\"functionName\",\"type\":\"string\",\"internalType\":\"string\"}]},{\"type\":\"error\",\"name\":\"InsufficientBalanceInProtocol\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"LendingManagerDepositFailed\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"LendingManagerMismatch\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"LendingManagerWithdrawFailed\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"ShareBalanceUnderflow\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"Vault_InsufficientBalancePostLMWithdraw\",\"inputs\":[]}]",
+	ABI: "[{\"type\":\"function\",\"name\":\"ADMIN_ROLE\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"DEBT_SUBSIDIZER_ROLE\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"allocateEpochYield\",\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"allocateYieldToEpoch\",\"inputs\":[{\"name\":\"epochId\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"allowance\",\"inputs\":[{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"spender\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"applyCollectionYieldForEpoch\",\"inputs\":[{\"name\":\"collection\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"epochId\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"approve\",\"inputs\":[{\"name\":\"spender\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"asset\",\"inputs\":[],\"outputs\":[{\"name\":\"assetTokenAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"balanceOf\",\"inputs\":[{\"name\":\"account\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"collectionTotalAssetsDeposited\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"convertToAssets\",\"inputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"convertToShares\",\"inputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"decimals\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint8\",\"internalType\":\"uint8\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"deposit\",\"inputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"depositForCollection\",\"inputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"epochManager\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"contractIEpochManager\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getCollectionPerformanceScore\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getCollectionTotalBorrowVolume\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getCollectionTotalYieldGenerated\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getCurrentEpochYield\",\"inputs\":[{\"name\":\"includeNonShared\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"outputs\":[{\"name\":\"availableYield\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getEpochYieldAllocated\",\"inputs\":[{\"name\":\"epochId\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"grantCollectionAccess\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"operator\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"isCollectionOperator\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"operator\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"lendingManager\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"contractILendingManager\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"maxDeposit\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"maxAssets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"maxMint\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"maxShares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"maxRedeem\",\"inputs\":[{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"maxShares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"maxWithdraw\",\"inputs\":[{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"maxAssets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"mint\",\"inputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"mintForCollection\",\"inputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"name\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"string\",\"internalType\":\"string\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"previewDeposit\",\"inputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"previewMint\",\"inputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"previewRedeem\",\"inputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"previewWithdraw\",\"inputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"recordCollectionBorrowVolume\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"borrowAmount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"redeem\",\"inputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"redeemForCollection\",\"inputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"repayBorrowBehalf\",\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"borrower\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"repayBorrowBehalfBatch\",\"inputs\":[{\"name\":\"amounts\",\"type\":\"uint256[]\",\"internalType\":\"uint256[]\"},{\"name\":\"borrowers\",\"type\":\"address[]\",\"internalType\":\"address[]\"},{\"name\":\"totalAmount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"resetEpochCollectionYieldFlags\",\"inputs\":[{\"name\":\"epochId\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"collections\",\"type\":\"address[]\",\"internalType\":\"address[]\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"revokeCollectionAccess\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"operator\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"setDebtSubsidizer\",\"inputs\":[{\"name\":\"_debtSubsidizerAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"setLendingManager\",\"inputs\":[{\"name\":\"_lendingManagerAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"symbol\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"string\",\"internalType\":\"string\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalAssets\",\"inputs\":[],\"outputs\":[{\"name\":\"totalManagedAssets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalAssetsDepositedAllCollections\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalSupply\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalYieldReserved\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"transfer\",\"inputs\":[{\"name\":\"to\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"transferForCollection\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"to\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"transferFrom\",\"inputs\":[{\"name\":\"from\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"to\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"updateCollectionPerformanceScore\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"score\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"withdraw\",\"inputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"withdrawForCollection\",\"inputs\":[{\"name\":\"assets\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"shares\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"Approval\",\"inputs\":[{\"name\":\"owner\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"spender\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionAccessGranted\",\"inputs\":[{\"name\":\"collection\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"operator\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionAccessRevoked\",\"inputs\":[{\"name\":\"collection\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"operator\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionBorrowVolumeUpdated\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"totalVolume\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"incrementAmount\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"timestamp\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionDeposit\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"caller\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"receiver\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"assets\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"shares\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"cTokenAmount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionPerformanceUpdated\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"performanceScore\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"timestamp\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionTransfer\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"from\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"to\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"assets\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionWithdraw\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"caller\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"receiver\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"assets\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"shares\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"cTokenAmount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionYieldAccrued\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"yieldAccrued\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"newTotalDeposits\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"globalIndex\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"previousCollectionIndex\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionYieldAppliedForEpoch\",\"inputs\":[{\"name\":\"epochId\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"collection\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"yieldSharePercentage\",\"type\":\"uint16\",\"indexed\":false,\"internalType\":\"uint16\"},{\"name\":\"yieldAdded\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"newTotalDeposits\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionYieldGenerated\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"yieldAmount\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"timestamp\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"CollectionYieldIndexed\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"epochId\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"assets\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"shares\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"cTokenAmount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Deposit\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"owner\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"assets\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"shares\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"LendingManagerChanged\",\"inputs\":[{\"name\":\"oldLendingManager\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"newLendingManager\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"changedBy\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Transfer\",\"inputs\":[{\"name\":\"from\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"to\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"VaultYieldAllocatedToEpoch\",\"inputs\":[{\"name\":\"epochId\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"amount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Withdraw\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"receiver\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"owner\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"assets\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"shares\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"YieldBatchRepaid\",\"inputs\":[{\"name\":\"totalAmount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"recipient\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"error\",\"name\":\"AddressZero\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"CollectionInsufficientBalance\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"requested\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"available\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"type\":\"error\",\"name\":\"CollectionNotRegistered\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"ExcessiveYieldAmount\",\"inputs\":[{\"name\":\"collection\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"requested\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"maxAllowed\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"type\":\"error\",\"name\":\"FunctionDisabledUse\",\"inputs\":[{\"name\":\"functionName\",\"type\":\"string\",\"internalType\":\"string\"}]},{\"type\":\"error\",\"name\":\"InsufficientBalanceInProtocol\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"LendingManagerDepositFailed\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"LendingManagerMismatch\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"LendingManagerWithdrawFailed\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"ShareBalanceUnderflow\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"UnauthorizedCollectionAccess\",\"inputs\":[{\"name\":\"collectionAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"operator\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"type\":\"error\",\"name\":\"Vault_InsufficientBalancePostLMWithdraw\",\"inputs\":[]}]",
 	ID:  "ICollectionsVault",
 }
 
@@ -411,6 +411,81 @@ func (iCollectionsVault *ICollectionsVault) UnpackEpochManager(data []byte) (com
 	return out0, err
 }
 
+// PackGetCollectionPerformanceScore is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0x4507ff6b.
+//
+// Solidity: function getCollectionPerformanceScore(address collectionAddress) view returns(uint256)
+func (iCollectionsVault *ICollectionsVault) PackGetCollectionPerformanceScore(collectionAddress common.Address) []byte {
+	enc, err := iCollectionsVault.abi.Pack("getCollectionPerformanceScore", collectionAddress)
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// UnpackGetCollectionPerformanceScore is the Go binding that unpacks the parameters returned
+// from invoking the contract method with ID 0x4507ff6b.
+//
+// Solidity: function getCollectionPerformanceScore(address collectionAddress) view returns(uint256)
+func (iCollectionsVault *ICollectionsVault) UnpackGetCollectionPerformanceScore(data []byte) (*big.Int, error) {
+	out, err := iCollectionsVault.abi.Unpack("getCollectionPerformanceScore", data)
+	if err != nil {
+		return new(big.Int), err
+	}
+	out0 := abi.ConvertType(out[0], new(big.Int)).(*big.Int)
+	return out0, err
+}
+
+// PackGetCollectionTotalBorrowVolume is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0x8ec4ceff.
+//
+// Solidity: function getCollectionTotalBorrowVolume(address collectionAddress) view returns(uint256)
+func (iCollectionsVault *ICollectionsVault) PackGetCollectionTotalBorrowVolume(collectionAddress common.Address) []byte {
+	enc, err := iCollectionsVault.abi.Pack("getCollectionTotalBorrowVolume", collectionAddress)
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// UnpackGetCollectionTotalBorrowVolume is the Go binding that unpacks the parameters returned
+// from invoking the contract method with ID 0x8ec4ceff.
+//
+// Solidity: function getCollectionTotalBorrowVolume(address collectionAddress) view returns(uint256)
+func (iCollectionsVault *ICollectionsVault) UnpackGetCollectionTotalBorrowVolume(data []byte) (*big.Int, error) {
+	out, err := iCollectionsVault.abi.Unpack("getCollectionTotalBorrowVolume", data)
+	if err != nil {
+		return new(big.Int), err
+	}
+	out0 := abi.ConvertType(out[0], new(big.Int)).(*big.Int)
+	return out0, err
+}
+
+// PackGetCollectionTotalYieldGenerated is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0x3c73ecfd.
+//
+// Solidity: function getCollectionTotalYieldGenerated(address collectionAddress) view returns(uint256)
+func (iCollectionsVault *ICollectionsVault) PackGetCollectionTotalYieldGenerated(collectionAddress common.Address) []byte {
+	enc, err := iCollectionsVault.abi.Pack("getCollectionTotalYieldGenerated", collectionAddress)
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// UnpackGetCollectionTotalYieldGenerated is the Go binding that unpacks the parameters returned
+// from invoking the contract method with ID 0x3c73ecfd.
+//
+// Solidity: function getCollectionTotalYieldGenerated(address collectionAddress) view returns(uint256)
+func (iCollectionsVault *ICollectionsVault) UnpackGetCollectionTotalYieldGenerated(data []byte) (*big.Int, error) {
+	out, err := iCollectionsVault.abi.Unpack("getCollectionTotalYieldGenerated", data)
+	if err != nil {
+		return new(big.Int), err
+	}
+	out0 := abi.ConvertType(out[0], new(big.Int)).(*big.Int)
+	return out0, err
+}
+
 // PackGetCurrentEpochYield is the Go binding used to pack the parameters required for calling
 // the contract method with ID 0x6aebd973.
 //
@@ -458,6 +533,43 @@ func (iCollectionsVault *ICollectionsVault) UnpackGetEpochYieldAllocated(data []
 		return new(big.Int), err
 	}
 	out0 := abi.ConvertType(out[0], new(big.Int)).(*big.Int)
+	return out0, err
+}
+
+// PackGrantCollectionAccess is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0xbf36daf5.
+//
+// Solidity: function grantCollectionAccess(address collectionAddress, address operator) returns()
+func (iCollectionsVault *ICollectionsVault) PackGrantCollectionAccess(collectionAddress common.Address, operator common.Address) []byte {
+	enc, err := iCollectionsVault.abi.Pack("grantCollectionAccess", collectionAddress, operator)
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// PackIsCollectionOperator is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0x27205380.
+//
+// Solidity: function isCollectionOperator(address collectionAddress, address operator) view returns(bool)
+func (iCollectionsVault *ICollectionsVault) PackIsCollectionOperator(collectionAddress common.Address, operator common.Address) []byte {
+	enc, err := iCollectionsVault.abi.Pack("isCollectionOperator", collectionAddress, operator)
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// UnpackIsCollectionOperator is the Go binding that unpacks the parameters returned
+// from invoking the contract method with ID 0x27205380.
+//
+// Solidity: function isCollectionOperator(address collectionAddress, address operator) view returns(bool)
+func (iCollectionsVault *ICollectionsVault) UnpackIsCollectionOperator(data []byte) (bool, error) {
+	out, err := iCollectionsVault.abi.Unpack("isCollectionOperator", data)
+	if err != nil {
+		return *new(bool), err
+	}
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
 	return out0, err
 }
 
@@ -761,6 +873,18 @@ func (iCollectionsVault *ICollectionsVault) UnpackPreviewWithdraw(data []byte) (
 	return out0, err
 }
 
+// PackRecordCollectionBorrowVolume is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0x6fd298f4.
+//
+// Solidity: function recordCollectionBorrowVolume(address collectionAddress, uint256 borrowAmount) returns()
+func (iCollectionsVault *ICollectionsVault) PackRecordCollectionBorrowVolume(collectionAddress common.Address, borrowAmount *big.Int) []byte {
+	enc, err := iCollectionsVault.abi.Pack("recordCollectionBorrowVolume", collectionAddress, borrowAmount)
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
 // PackRedeem is the Go binding used to pack the parameters required for calling
 // the contract method with ID 0xba087652.
 //
@@ -841,6 +965,18 @@ func (iCollectionsVault *ICollectionsVault) PackRepayBorrowBehalfBatch(amounts [
 // Solidity: function resetEpochCollectionYieldFlags(uint256 epochId, address[] collections) returns()
 func (iCollectionsVault *ICollectionsVault) PackResetEpochCollectionYieldFlags(epochId *big.Int, collections []common.Address) []byte {
 	enc, err := iCollectionsVault.abi.Pack("resetEpochCollectionYieldFlags", epochId, collections)
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// PackRevokeCollectionAccess is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0xaeb7be9c.
+//
+// Solidity: function revokeCollectionAccess(address collectionAddress, address operator) returns()
+func (iCollectionsVault *ICollectionsVault) PackRevokeCollectionAccess(collectionAddress common.Address, operator common.Address) []byte {
+	enc, err := iCollectionsVault.abi.Pack("revokeCollectionAccess", collectionAddress, operator)
 	if err != nil {
 		panic(err)
 	}
@@ -971,6 +1107,31 @@ func (iCollectionsVault *ICollectionsVault) UnpackTotalSupply(data []byte) (*big
 	return out0, err
 }
 
+// PackTotalYieldReserved is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0x4b2373f5.
+//
+// Solidity: function totalYieldReserved() view returns(uint256)
+func (iCollectionsVault *ICollectionsVault) PackTotalYieldReserved() []byte {
+	enc, err := iCollectionsVault.abi.Pack("totalYieldReserved")
+	if err != nil {
+		panic(err)
+	}
+	return enc
+}
+
+// UnpackTotalYieldReserved is the Go binding that unpacks the parameters returned
+// from invoking the contract method with ID 0x4b2373f5.
+//
+// Solidity: function totalYieldReserved() view returns(uint256)
+func (iCollectionsVault *ICollectionsVault) UnpackTotalYieldReserved(data []byte) (*big.Int, error) {
+	out, err := iCollectionsVault.abi.Unpack("totalYieldReserved", data)
+	if err != nil {
+		return new(big.Int), err
+	}
+	out0 := abi.ConvertType(out[0], new(big.Int)).(*big.Int)
+	return out0, err
+}
+
 // PackTransfer is the Go binding used to pack the parameters required for calling
 // the contract method with ID 0xa9059cbb.
 //
@@ -1044,6 +1205,18 @@ func (iCollectionsVault *ICollectionsVault) UnpackTransferFrom(data []byte) (boo
 	}
 	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
 	return out0, err
+}
+
+// PackUpdateCollectionPerformanceScore is the Go binding used to pack the parameters required for calling
+// the contract method with ID 0x11104786.
+//
+// Solidity: function updateCollectionPerformanceScore(address collectionAddress, uint256 score) returns()
+func (iCollectionsVault *ICollectionsVault) PackUpdateCollectionPerformanceScore(collectionAddress common.Address, score *big.Int) []byte {
+	enc, err := iCollectionsVault.abi.Pack("updateCollectionPerformanceScore", collectionAddress, score)
+	if err != nil {
+		panic(err)
+	}
+	return enc
 }
 
 // PackWithdraw is the Go binding used to pack the parameters required for calling
@@ -1139,6 +1312,134 @@ func (iCollectionsVault *ICollectionsVault) UnpackApprovalEvent(log *types.Log) 
 	return out, nil
 }
 
+// ICollectionsVaultCollectionAccessGranted represents a CollectionAccessGranted event raised by the ICollectionsVault contract.
+type ICollectionsVaultCollectionAccessGranted struct {
+	Collection common.Address
+	Operator   common.Address
+	Raw        *types.Log // Blockchain specific contextual infos
+}
+
+const ICollectionsVaultCollectionAccessGrantedEventName = "CollectionAccessGranted"
+
+// ContractEventName returns the user-defined event name.
+func (ICollectionsVaultCollectionAccessGranted) ContractEventName() string {
+	return ICollectionsVaultCollectionAccessGrantedEventName
+}
+
+// UnpackCollectionAccessGrantedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event CollectionAccessGranted(address indexed collection, address indexed operator)
+func (iCollectionsVault *ICollectionsVault) UnpackCollectionAccessGrantedEvent(log *types.Log) (*ICollectionsVaultCollectionAccessGranted, error) {
+	event := "CollectionAccessGranted"
+	if log.Topics[0] != iCollectionsVault.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(ICollectionsVaultCollectionAccessGranted)
+	if len(log.Data) > 0 {
+		if err := iCollectionsVault.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iCollectionsVault.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
+}
+
+// ICollectionsVaultCollectionAccessRevoked represents a CollectionAccessRevoked event raised by the ICollectionsVault contract.
+type ICollectionsVaultCollectionAccessRevoked struct {
+	Collection common.Address
+	Operator   common.Address
+	Raw        *types.Log // Blockchain specific contextual infos
+}
+
+const ICollectionsVaultCollectionAccessRevokedEventName = "CollectionAccessRevoked"
+
+// ContractEventName returns the user-defined event name.
+func (ICollectionsVaultCollectionAccessRevoked) ContractEventName() string {
+	return ICollectionsVaultCollectionAccessRevokedEventName
+}
+
+// UnpackCollectionAccessRevokedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event CollectionAccessRevoked(address indexed collection, address indexed operator)
+func (iCollectionsVault *ICollectionsVault) UnpackCollectionAccessRevokedEvent(log *types.Log) (*ICollectionsVaultCollectionAccessRevoked, error) {
+	event := "CollectionAccessRevoked"
+	if log.Topics[0] != iCollectionsVault.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(ICollectionsVaultCollectionAccessRevoked)
+	if len(log.Data) > 0 {
+		if err := iCollectionsVault.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iCollectionsVault.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
+}
+
+// ICollectionsVaultCollectionBorrowVolumeUpdated represents a CollectionBorrowVolumeUpdated event raised by the ICollectionsVault contract.
+type ICollectionsVaultCollectionBorrowVolumeUpdated struct {
+	CollectionAddress common.Address
+	TotalVolume       *big.Int
+	IncrementAmount   *big.Int
+	Timestamp         *big.Int
+	Raw               *types.Log // Blockchain specific contextual infos
+}
+
+const ICollectionsVaultCollectionBorrowVolumeUpdatedEventName = "CollectionBorrowVolumeUpdated"
+
+// ContractEventName returns the user-defined event name.
+func (ICollectionsVaultCollectionBorrowVolumeUpdated) ContractEventName() string {
+	return ICollectionsVaultCollectionBorrowVolumeUpdatedEventName
+}
+
+// UnpackCollectionBorrowVolumeUpdatedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event CollectionBorrowVolumeUpdated(address indexed collectionAddress, uint256 indexed totalVolume, uint256 indexed incrementAmount, uint256 timestamp)
+func (iCollectionsVault *ICollectionsVault) UnpackCollectionBorrowVolumeUpdatedEvent(log *types.Log) (*ICollectionsVaultCollectionBorrowVolumeUpdated, error) {
+	event := "CollectionBorrowVolumeUpdated"
+	if log.Topics[0] != iCollectionsVault.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(ICollectionsVaultCollectionBorrowVolumeUpdated)
+	if len(log.Data) > 0 {
+		if err := iCollectionsVault.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iCollectionsVault.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
+}
+
 // ICollectionsVaultCollectionDeposit represents a CollectionDeposit event raised by the ICollectionsVault contract.
 type ICollectionsVaultCollectionDeposit struct {
 	CollectionAddress common.Address
@@ -1167,6 +1468,49 @@ func (iCollectionsVault *ICollectionsVault) UnpackCollectionDepositEvent(log *ty
 		return nil, errors.New("event signature mismatch")
 	}
 	out := new(ICollectionsVaultCollectionDeposit)
+	if len(log.Data) > 0 {
+		if err := iCollectionsVault.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iCollectionsVault.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
+}
+
+// ICollectionsVaultCollectionPerformanceUpdated represents a CollectionPerformanceUpdated event raised by the ICollectionsVault contract.
+type ICollectionsVaultCollectionPerformanceUpdated struct {
+	CollectionAddress common.Address
+	PerformanceScore  *big.Int
+	Timestamp         *big.Int
+	Raw               *types.Log // Blockchain specific contextual infos
+}
+
+const ICollectionsVaultCollectionPerformanceUpdatedEventName = "CollectionPerformanceUpdated"
+
+// ContractEventName returns the user-defined event name.
+func (ICollectionsVaultCollectionPerformanceUpdated) ContractEventName() string {
+	return ICollectionsVaultCollectionPerformanceUpdatedEventName
+}
+
+// UnpackCollectionPerformanceUpdatedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event CollectionPerformanceUpdated(address indexed collectionAddress, uint256 indexed performanceScore, uint256 timestamp)
+func (iCollectionsVault *ICollectionsVault) UnpackCollectionPerformanceUpdatedEvent(log *types.Log) (*ICollectionsVaultCollectionPerformanceUpdated, error) {
+	event := "CollectionPerformanceUpdated"
+	if log.Topics[0] != iCollectionsVault.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(ICollectionsVaultCollectionPerformanceUpdated)
 	if len(log.Data) > 0 {
 		if err := iCollectionsVault.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
 			return nil, err
@@ -1347,6 +1691,49 @@ func (iCollectionsVault *ICollectionsVault) UnpackCollectionYieldAppliedForEpoch
 		return nil, errors.New("event signature mismatch")
 	}
 	out := new(ICollectionsVaultCollectionYieldAppliedForEpoch)
+	if len(log.Data) > 0 {
+		if err := iCollectionsVault.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
+			return nil, err
+		}
+	}
+	var indexed abi.Arguments
+	for _, arg := range iCollectionsVault.abi.Events[event].Inputs {
+		if arg.Indexed {
+			indexed = append(indexed, arg)
+		}
+	}
+	if err := abi.ParseTopics(out, indexed, log.Topics[1:]); err != nil {
+		return nil, err
+	}
+	out.Raw = log
+	return out, nil
+}
+
+// ICollectionsVaultCollectionYieldGenerated represents a CollectionYieldGenerated event raised by the ICollectionsVault contract.
+type ICollectionsVaultCollectionYieldGenerated struct {
+	CollectionAddress common.Address
+	YieldAmount       *big.Int
+	Timestamp         *big.Int
+	Raw               *types.Log // Blockchain specific contextual infos
+}
+
+const ICollectionsVaultCollectionYieldGeneratedEventName = "CollectionYieldGenerated"
+
+// ContractEventName returns the user-defined event name.
+func (ICollectionsVaultCollectionYieldGenerated) ContractEventName() string {
+	return ICollectionsVaultCollectionYieldGeneratedEventName
+}
+
+// UnpackCollectionYieldGeneratedEvent is the Go binding that unpacks the event data emitted
+// by contract.
+//
+// Solidity: event CollectionYieldGenerated(address indexed collectionAddress, uint256 indexed yieldAmount, uint256 indexed timestamp)
+func (iCollectionsVault *ICollectionsVault) UnpackCollectionYieldGeneratedEvent(log *types.Log) (*ICollectionsVaultCollectionYieldGenerated, error) {
+	event := "CollectionYieldGenerated"
+	if log.Topics[0] != iCollectionsVault.abi.Events[event].ID {
+		return nil, errors.New("event signature mismatch")
+	}
+	out := new(ICollectionsVaultCollectionYieldGenerated)
 	if len(log.Data) > 0 {
 		if err := iCollectionsVault.abi.UnpackIntoInterface(out, event, log.Data); err != nil {
 			return nil, err
@@ -1702,6 +2089,9 @@ func (iCollectionsVault *ICollectionsVault) UnpackError(raw []byte) (any, error)
 	if bytes.Equal(raw[:4], iCollectionsVault.abi.Errors["ShareBalanceUnderflow"].ID.Bytes()[:4]) {
 		return iCollectionsVault.UnpackShareBalanceUnderflowError(raw[4:])
 	}
+	if bytes.Equal(raw[:4], iCollectionsVault.abi.Errors["UnauthorizedCollectionAccess"].ID.Bytes()[:4]) {
+		return iCollectionsVault.UnpackUnauthorizedCollectionAccessError(raw[4:])
+	}
 	if bytes.Equal(raw[:4], iCollectionsVault.abi.Errors["VaultInsufficientBalancePostLMWithdraw"].ID.Bytes()[:4]) {
 		return iCollectionsVault.UnpackVaultInsufficientBalancePostLMWithdrawError(raw[4:])
 	}
@@ -1941,6 +2331,31 @@ func ICollectionsVaultShareBalanceUnderflowErrorID() common.Hash {
 func (iCollectionsVault *ICollectionsVault) UnpackShareBalanceUnderflowError(raw []byte) (*ICollectionsVaultShareBalanceUnderflow, error) {
 	out := new(ICollectionsVaultShareBalanceUnderflow)
 	if err := iCollectionsVault.abi.UnpackIntoInterface(out, "ShareBalanceUnderflow", raw); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ICollectionsVaultUnauthorizedCollectionAccess represents a UnauthorizedCollectionAccess error raised by the ICollectionsVault contract.
+type ICollectionsVaultUnauthorizedCollectionAccess struct {
+	CollectionAddress common.Address
+	Operator          common.Address
+}
+
+// ErrorID returns the hash of canonical representation of the error's signature.
+//
+// Solidity: error UnauthorizedCollectionAccess(address collectionAddress, address operator)
+func ICollectionsVaultUnauthorizedCollectionAccessErrorID() common.Hash {
+	return common.HexToHash("0x533d2ab59dda97bc1adf51b17eff135dd3d895ee7473f783081ad597c37b1476")
+}
+
+// UnpackUnauthorizedCollectionAccessError is the Go binding used to decode the provided
+// error data into the corresponding Go error struct.
+//
+// Solidity: error UnauthorizedCollectionAccess(address collectionAddress, address operator)
+func (iCollectionsVault *ICollectionsVault) UnpackUnauthorizedCollectionAccessError(raw []byte) (*ICollectionsVaultUnauthorizedCollectionAccess, error) {
+	out := new(ICollectionsVaultUnauthorizedCollectionAccess)
+	if err := iCollectionsVault.abi.UnpackIntoInterface(out, "UnauthorizedCollectionAccess", raw); err != nil {
 		return nil, err
 	}
 	return out, nil
