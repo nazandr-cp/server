@@ -75,6 +75,15 @@ func BuildPairs(pairs []Pair) (root [32]byte, proofs map[[20]byte][][]byte) {
 		return root, proofs
 	}
 
+	for i := 1; i < len(pairs); i++ {
+		prev := pairs[i-1]
+		curr := pairs[i]
+		if bytes.Compare(prev.Account.Bytes(), curr.Account.Bytes()) > 0 ||
+			(bytes.Equal(prev.Account.Bytes(), curr.Account.Bytes()) && prev.Amount.Cmp(curr.Amount) > 0) {
+			panic("unsorted recipients")
+		}
+	}
+
 	level := make([][32]byte, len(pairs))
 	for i, p := range pairs {
 		var amt [32]byte
