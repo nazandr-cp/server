@@ -17,7 +17,7 @@ func Run(ctx context.Context, ethc *eth.Clients, dur time.Duration, hub *ws.Hub)
 		case <-ticker.C:
 			// TODO: orchestration logic (start/finalize epochs, allocate yield)
 		case ev := <-ethc.Events():
-			hub.Broadcast(ev)
+			hub.Broadcast("epochs", ev)
 		case <-ctx.Done():
 			return
 		}

@@ -9,30 +9,37 @@ import (
 
 type Hub struct {
 	mu    sync.Mutex
-	conns map[*websocket.Conn]struct{}
+	conns map[string]map[*websocket.Conn]struct{}
 	upg   websocket.Upgrader
 }
 
 func NewHub() *Hub {
 	return &Hub{
-		conns: make(map[*websocket.Conn]struct{}),
+		conns: make(map[string]map[*websocket.Conn]struct{}),
 		upg:   websocket.Upgrader{CheckOrigin: func(r *http.Request) bool { return true }},
 	}
 }
 
 func (h *Hub) ServeWS(w http.ResponseWriter, r *http.Request) {
+	topic := r.URL.Query().Get("topic")
+	if topic == "" {
+		topic = "default"
+	}
 	c, err := h.upg.Upgrade(w, r, nil)
 	if err != nil {
 		return
 	}
 	h.mu.Lock()
-	h.conns[c] = struct{}{}
+	if h.conns[topic] == nil {
+		h.conns[topic] = make(map[*websocket.Conn]struct{})
+	}
+	h.conns[topic][c] = struct{}{}
 	h.mu.Unlock()
 
 	go func() {
 		defer func() {
 			h.mu.Lock()
-			delete(h.conns, c)
+			delete(h.conns[topic], c)
 			h.mu.Unlock()
 			c.Close()
 		}()
@@ -45,10 +52,18 @@ func (h *Hub) ServeWS(w http.ResponseWriter, r *http.Request) {
 }
 
 // Broadcast sends v to all connected clients.
-func (h *Hub) Broadcast(v interface{}) {
+func (h *Hub) Broadcast(topic string, v interface{}) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	for c := range h.conns {
+	if topic == "" {
+		for _, conns := range h.conns {
+			for c := range conns {
+				_ = c.WriteJSON(v)
+			}
+		}
+		return
+	}
+	for c := range h.conns[topic] {
 		_ = c.WriteJSON(v)
 	}
 }
