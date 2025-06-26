@@ -40,6 +40,9 @@ func main() {
 	if cfg.EpochManagerAddr == "" {
 		logger.Fatal("EPOCH_MANAGER_ADDR environment variable is required")
 	}
+	if cfg.VaultAddr == "" {
+		logger.Fatal("VAULT_ADDR environment variable is required")
+	}
 	if cfg.PrivateKey == "" {
 		logger.Fatal("PRIVATE_KEY environment variable is required")
 	}
@@ -94,9 +97,8 @@ func main() {
 	}
 
 	// Test DataCollector functionality if vault addresses are provided
-	collectionsVaultAddressesStr := getEnvOrDefault("COLLECTIONS_VAULT_ADDRESSES", "")
-	if collectionsVaultAddressesStr != "" {
-		testDataCollector(cfg.RPCHTTPURL, cfg.EpochManagerAddr, collectionsVaultAddressesStr)
+	if cfg.VaultAddr != "" {
+		testDataCollector(cfg.RPCHTTPURL, cfg.EpochManagerAddr, cfg.VaultAddr)
 	}
 
 	// Create scheduler instance

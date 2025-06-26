@@ -21,8 +21,8 @@ import (
 type Clients struct {
 	RPC    *ethclient.Client
 	WS     *ethclient.Client
-	EM     *bind.BoundContract // Changed to *bind.BoundContract
-	VA     *bind.BoundContract // Changed to *bind.BoundContract
+	EM     *bind.BoundContract
+	VA     *bind.BoundContract
 	TxOpts *bind.TransactOpts
 
 	events chan types.Log
@@ -64,12 +64,10 @@ func New(ctx context.Context, cfg config.Config) (*Clients, error) {
 	}
 
 	emAddr := common.HexToAddress(cfg.EpochManagerAddr)
-	iEpochManager := contracts.NewIEpochManager()
-	em := iEpochManager.Instance(rpc, emAddr) // Updated instantiation
+	em := contracts.NewIEpochManager().Instance(rpc, emAddr)
 
 	vaAddr := common.HexToAddress(cfg.VaultAddr)
-	iCollectionsVault := contracts.NewICollectionsVault()
-	va := iCollectionsVault.Instance(rpc, vaAddr) // Updated instantiation
+	va := contracts.NewICollectionsVault().Instance(rpc, vaAddr)
 
 	c := &Clients{
 		RPC:    rpc,
